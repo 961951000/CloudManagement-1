@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CloudManagement.Models;
 
-namespace CloudManagement.Filters
+namespace CloudManagement.Filters.Authentication
 {
     public class IdentityBasicAuthenticationAttribute : BasicAuthenticationAttribute
     {

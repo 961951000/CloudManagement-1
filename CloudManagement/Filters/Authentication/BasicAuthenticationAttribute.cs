@@ -13,7 +13,7 @@ using System.Web.SessionState;
 using CloudManagement.Results;
 using AllowAnonymousAttribute = System.Web.Http.AllowAnonymousAttribute;
 
-namespace CloudManagement.Filters
+namespace CloudManagement.Filters.Authentication
 {
     public abstract class BasicAuthenticationAttribute : Attribute, IAuthenticationFilter
     {

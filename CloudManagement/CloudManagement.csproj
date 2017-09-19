@@ -54,6 +54,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -211,10 +214,14 @@
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DatabaseContext\SqlServerContext.cs" />
+    <Compile Include="Filters\Action\ExecutionTimeFilterAttribute.cs" />
+    <Compile Include="Filters\Authentication\BasicAuthenticationAttribute.cs" />
+    <Compile Include="Filters\Authentication\IdentityBasicAuthenticationAttribute.cs" />
+    <Compile Include="Filters\Handler\ApiExceptionFilterAttribute.cs" />
+    <Compile Include="Helper\Logger.cs" />
     <Compile Include="Results\AuthenticationFailureResult.cs" />
-    <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
-    <Compile Include="Filters\IdentityBasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -269,6 +276,9 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

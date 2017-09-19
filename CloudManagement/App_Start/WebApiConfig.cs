@@ -1,5 +1,7 @@
-﻿using CloudManagement.Filters;
-using System.Web.Http;
+﻿using System.Web.Http;
+using CloudManagement.Filters.Action;
+using CloudManagement.Filters.Authentication;
+using CloudManagement.Filters.Handler;
 
 namespace CloudManagement
 {
@@ -21,6 +23,8 @@ namespace CloudManagement
             );
 
             config.Filters.Add(new IdentityBasicAuthenticationAttribute());
+            config.Filters.Add(new ApiExceptionFilterAttribute());
+            config.Filters.Add(new ExecutionTimeFilterAttribute());
         }
     }
 }
