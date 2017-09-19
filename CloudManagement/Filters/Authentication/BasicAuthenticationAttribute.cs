@@ -10,7 +10,6 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
 using System.Web.SessionState;
-using CloudManagement.Results;
 using AllowAnonymousAttribute = System.Web.Http.AllowAnonymousAttribute;
 
 namespace CloudManagement.Filters.Authentication
@@ -53,15 +52,6 @@ namespace CloudManagement.Filters.Authentication
             if (context.Principal == null)
             {
                 context.ErrorResult = new UnauthorizedResult(new[] { new AuthenticationHeaderValue("Basic") }, context.Request);
-            }
-            #endregion
-
-            #region Verify that Session is out of date
-            HttpSessionState session = HttpContext.Current.Session;
-            // If the browser session has expired...
-            if (context.Principal != null && session["token"] == null)
-            {
-                context.ErrorResult = new AuthenticationFailureResult("Session expired", context.Request);
             }
             #endregion
         }

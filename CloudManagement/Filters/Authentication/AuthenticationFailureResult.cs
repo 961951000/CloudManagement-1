@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace CloudManagement.Results
+namespace CloudManagement.Filters.Authentication
 {
     public class AuthenticationFailureResult : IHttpActionResult
     {

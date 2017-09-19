@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Security.Principal;
-using System.Web;
 
 namespace CloudManagement.Models
 {
@@ -14,7 +10,7 @@ namespace CloudManagement.Models
         {
             User = user ?? throw new ArgumentNullException(nameof(user));
         }
-        public string Name => User.Name;
+        public string Name => User.UserDetail.UserPrincipalName;
 
         public string AuthenticationType => "Basic";
 

@@ -13,7 +13,7 @@ namespace CloudManagement.Filters.Authentication
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 // Implement logic suitable for your case           
-                return await Task.Run(() => new ClaimsPrincipal(new UserManage(new User { Name = userName, PasswordKey = password })), cancellationToken);
+                return await Task.Run(() => new ClaimsPrincipal(new UserManage(new User { UserDetail = new UserDetail { UserPrincipalName = userName, Password = password } })), cancellationToken);
                 // req.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetByte));
             }
             return null;
