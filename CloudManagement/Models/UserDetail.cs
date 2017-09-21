@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +15,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+        /// <summary>
+        /// 用户名
+        /// </summary>
 		[Column("UserPrincipalName")]
 		public string UserPrincipalName
 		{
@@ -29,6 +32,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+        /// <summary>
+        /// 密码
+        /// </summary>
 		[Column("Password")]
 		public string Password
 		{

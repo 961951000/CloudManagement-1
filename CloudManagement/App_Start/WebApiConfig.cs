@@ -22,7 +22,7 @@ namespace CloudManagement
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Filters.Add(new IdentityBasicAuthenticationAttribute());
+            //config.Filters.Add(new IdentityBasicAuthenticationAttribute());
             config.Filters.Add(new ApiExceptionFilterAttribute());
             config.Filters.Add(new ExecutionTimeFilterAttribute());
         }
