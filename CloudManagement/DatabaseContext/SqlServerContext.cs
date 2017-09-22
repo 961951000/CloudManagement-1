@@ -29,6 +29,8 @@ namespace CloudManagement.DatabaseContext
 
         public DbSet<UserDetail> UserDetail { get; set; }
 
+        public DbSet<UserGroup> UserGroup { get; set; }
+
         public DbSet<UserGroupRoleMapping> UserGroupRoleMapping { get; set; }
 
         public DbSet<UserThirdPartyServiceMapping> UserThirdPartyServiceMapping { get; set; }

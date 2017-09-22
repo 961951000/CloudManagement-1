@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -61,7 +62,12 @@ namespace CloudManagement.Models
 			get;
 		}
 
-		public override string ToString()
+        public ICollection<User> User { get; set; }
+
+        [ForeignKey("CreateByUserId")]
+        public User CreateByUser { get; set; }
+
+        public override string ToString()
 		{
 			return "UserGroupId=" + UserGroupId + ",UserGroupName=" + UserGroupName + ",CreateTime=" + CreateTime + ",UpdateTime=" + UpdateTime + ",CreateByUserId=" + CreateByUserId;
 		}

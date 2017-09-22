@@ -238,6 +238,8 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Filters\Authentication\AuthenticationFailureResult.cs" />
+    <Compile Include="Services\TenantService.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\App_Data\XmlDocument.xml" />

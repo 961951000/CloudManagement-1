@@ -481,6 +481,16 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:CloudManagement.Controllers.TenantController">
+            <summary>
+            租户控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
         <member name="T:CloudManagement.Controllers.UserController">
             <summary>
             用户控制器
@@ -491,57 +501,533 @@
             构造函数
             </summary>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.Get">
+        <member name="M:CloudManagement.Controllers.UserController.GetUserListByTenant(CloudManagement.Models.Tenant)">
             <summary>
-            获取用户信息
+            由租户获取用户列表
             </summary>
-            <returns>用户信息</returns>
+            <returns>当前租户用户列表</returns>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.Register(CloudManagement.Models.UserDetail)">
+        <member name="M:CloudManagement.Helpers.HttpExtensionMethods.ExecuteGetServiceCall(System.String,System.String,System.String)">
             <summary>
-            用户注册
+            Executes the HTTP GET service call.
             </summary>
-            <param name="userDetail"></param>
-            <returns>用户ID</returns>
+            <param name="requestUrl">The request URL.</param>
+            <param name="token">The token value.</param>
+            <param name="endpoint">The endpoint.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException">
+            Request Url cannot be null or white space.
+            or
+            Endpoint cannot be null or white space.
+            or
+            Resource cannot be null or white space.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">tokenManager</exception>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.Add(CloudManagement.Models.User)">
+        <member name="M:CloudManagement.Helpers.HttpExtensionMethods.ExecutePostServiceCall``1(System.String,System.String,System.String,``0)">
             <summary>
-            添加用户
+            Executes the HTTP POST service call.
             </summary>
-            <param name="user">用户信息</param>
-            <returns>用户ID</returns>
+            <typeparam name="T"></typeparam>
+            <param name="requestUrl">The request URL.</param>
+            <param name="token">The token value.</param>
+            <param name="endpoint">The endpoint.</param>
+            <param name="postContent">Content of the post.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">postContent</exception>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.Delete(System.Int32)">
+        <member name="M:CloudManagement.Helpers.HttpExtensionMethods.ExecuteDeleteServiceCall(System.String,System.String,System.String)">
             <summary>
-            删除用户
+            Executes the HTTP DELETE service call.
             </summary>
-            <param name="id">用户id</param>
-            <returns>写入底层数据库的状态条目数</returns>
+            <param name="requestUrl">The request URL.</param>
+            <param name="token">The token value.</param>
+            <param name="endpoint">The endpoint.</param>
+            <returns></returns>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.Update(System.Int32,CloudManagement.Models.User)">
+        <member name="T:CloudManagement.Models.OperationLog">
             <summary>
-            修改用户信息
+            操作日志表
             </summary>
-            <param name="id">用户编号</param>
-            <param name="user">用户信息</param>
-            <returns>写入底层数据库的状态条目数</returns>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.Login(System.String,System.String)">
+        <member name="P:CloudManagement.Models.OperationLog.OperationLogId">
             <summary>
-            用户登陆
+            操作日志编号
             </summary>
-            <param name="username">用户名</param>
-            <param name="password">密码</param>
-            <returns>令牌</returns>
+        </member>
+        <member name="P:CloudManagement.Models.OperationLog.Context">
+            <summary>
+            日志内容
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.OperationLog.CreateTime">
+            <summary>
+            日志添加时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.OperationLog.OperationTypeId">
+            <summary>
+            操作类型编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.OperationLog.UserId">
+            <summary>
+            用户编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.OperationType">
+            <summary>
+            操作类型表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.OperationType.OperationTypeId">
+            <summary>
+            操作类型编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.OperationType.OperationName">
+            <summary>
+            操作名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.OperationType.TypeCode">
+            <summary>
+            类型代码
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.Permission">
+            <summary>
+            权限信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Permission.PermissionId">
+            <summary>
+            权限信息编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Permission.PermissionName">
+            <summary>
+            权限名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Permission.PermissionCode">
+            <summary>
+            权限代码
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Permission.ServiceId">
+            <summary>
+            服务编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.Role">
+            <summary>
+            角色信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.RoleId">
+            <summary>
+            角色编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.UpdateTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.CreateByUserId">
+            <summary>
+            创建用户编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.RolePermissionMapping">
+            <summary>
+            角色权限映射表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.RolePermissionMapping.RolePermissionMappingId">
+            <summary>
+            角色权限映射编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.RolePermissionMapping.RoleId">
+            <summary>
+            角色编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.RolePermissionMapping.PermissionId">
+            <summary>
+            权限编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.Service">
+            <summary>
+            服务信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Service.ServiceId">
+            <summary>
+            服务编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Service.ServiceName">
+            <summary>
+            服务名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Service.ServiceCode">
+            <summary>
+            服务代码
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.Tenant">
+            <summary>
+            租户信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.TenantId">
+            <summary>
+            租户编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.UpdateTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.TenantDetailId">
+            <summary>
+            租户详细信息编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.CreateByUserId">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.TenantDetail">
+            <summary>
+            租户详细信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.TenantDetailId">
+            <summary>
+            租户详细信息编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.TenantPrincipalName">
+            <summary>
+            租户名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.RegistrationNumber">
+            <summary>
+            统一社会信用码/注册号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.BusinessLicense">
+            <summary>
+            工商营业执照
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.OrganizationCode">
+            <summary>
+            组织机构代码
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.TaxRegistrationCertificate">
+            <summary>
+            税务登记证
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.LegalRepresentative">
+            <summary>
+            法定代表人姓名
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.Address">
+            <summary>
+            住所
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.RegisteredCapital">
+            <summary>
+            注册资本
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.EnterpriseStatus">
+            <summary>
+            企业状态
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.CompanyType">
+            <summary>
+            公司类型
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.EstablishmentDate">
+            <summary>
+            成立日期
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.BusinessTerm">
+            <summary>
+            营业期限
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.RegistrationAuthority">
+            <summary>
+            登记机关
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.AcceptingOrgans">
+            <summary>
+            受理机关
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.TenantDetail.BusinessScope">
+            <summary>
+            经营范围
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.ThirdPartyService">
+            <summary>
+            第三方服务信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.ThirdPartyService.ThirdPartyServiceId">
+            <summary>
+            第三方服务编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.ThirdPartyService.ThirdPartyServiceName">
+            <summary>
+            第三方服务名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.ThirdPartyService.ThirdPartyServiceCode">
+            <summary>
+            第三方服务代码
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.ThirdPartyService.BindToken">
+            <summary>
+            绑定令牌
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.User">
+            <summary>
+            用户信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.UserId">
+            <summary>
+            用户编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.Token">
+            <summary>
+            令牌
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.UpdateTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.UserDetailId">
+            <summary>
+            用户详细信息编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.UserGroupId">
+            <summary>
+            用户所在组编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.TenantId">
+            <summary>
+            用户所在企业编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.UserDetail">
+            <summary>
+            用户详细信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.UserDetailId">
+            <summary>
+            用户详细信息编号
+            </summary>
         </member>
         <member name="P:CloudManagement.Models.UserDetail.UserPrincipalName">
             <summary>
             用户名
             </summary>
         </member>
+        <member name="P:CloudManagement.Models.UserDetail.AccountEnabled">
+            <summary>
+            账号状态
+            </summary>
+        </member>
         <member name="P:CloudManagement.Models.UserDetail.Password">
             <summary>
             密码
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.MailNickname">
+            <summary>
+            别名
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.DisplayName">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.GivenName">
+            <summary>
+            名字
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.Surname">
+            <summary>
+            姓氏
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.JobTitle">
+            <summary>
+            职务
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.Department">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.StreetAddress">
+            <summary>
+            街道地址
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.City">
+            <summary>
+            城市
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.State">
+            <summary>
+            省/自治区/直辖市
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.Country">
+            <summary>
+            国家或地区
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.PhysicalDeliveryOfficeName">
+            <summary>
+            办公室号码
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.TelephoneNumber">
+            <summary>
+            办公电话
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.PostalCode">
+            <summary>
+            邮政编码
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.UserGroup">
+            <summary>
+            用户组信息表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.UserGroupId">
+            <summary>
+            用户组编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.UserGroupName">
+            <summary>
+            用户组名称
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.UpdateTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.CreateByUserId">
+            <summary>
+            创建用户编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.UserGroupRoleMapping">
+            <summary>
+            用户组角色映射表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroupRoleMapping.UserGroupRoleMappingId">
+            <summary>
+            用户组角色映射编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroupRoleMapping.UserGroupId">
+            <summary>
+            用户组编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroupRoleMapping.RoleId">
+            <summary>
+            角色编号
+            </summary>
+        </member>
+        <member name="T:CloudManagement.Models.UserThirdPartyServiceMapping">
+            <summary>
+            用户第三方服务映射表
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserThirdPartyServiceMapping.UserThirdPartyServiceMappingId">
+            <summary>
+            用户第三方服务映射编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserThirdPartyServiceMapping.UserId">
+            <summary>
+            用户编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserThirdPartyServiceMapping.ThirdPartyServiceId">
+            <summary>
+            第三方服务编号
             </summary>
         </member>
     </members>
