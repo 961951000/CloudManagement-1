@@ -4,10 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudManagement.Models
 {
+	/// <summary>
+	/// 角色权限映射表
+	/// </summary>
 	[Table("RolePermissionMapping")]
 	public class RolePermissionMapping
 	{
 		#region Model
+		/// <summary>
+		/// 角色权限映射编号
+		/// </summary>
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("RolePermissionMappingId", Order = 0)]
 		public int? RolePermissionMappingId
 		{
@@ -15,6 +21,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 角色编号
+		/// </summary>
 		[Column("RoleId")]
 		public int? RoleId
 		{
@@ -22,6 +31,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 权限编号
+		/// </summary>
 		[Column("PermissionId")]
 		public int? PermissionId
 		{

@@ -4,10 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudManagement.Models
 {
+	/// <summary>
+	/// 权限信息表
+	/// </summary>
 	[Table("Permission")]
 	public class Permission
 	{
 		#region Model
+		/// <summary>
+		/// 权限信息编号
+		/// </summary>
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("PermissionId", Order = 0)]
 		public int? PermissionId
 		{
@@ -15,6 +21,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 权限名称
+		/// </summary>
 		[Column("PermissionName")]
 		public string PermissionName
 		{
@@ -22,6 +31,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 权限代码
+		/// </summary>
 		[Column("PermissionCode")]
 		public string PermissionCode
 		{
@@ -29,6 +41,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 服务编号
+		/// </summary>
 		[Column("ServiceId")]
 		public int? ServiceId
 		{

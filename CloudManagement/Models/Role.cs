@@ -4,10 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudManagement.Models
 {
+	/// <summary>
+	/// 角色信息表
+	/// </summary>
 	[Table("Role")]
 	public class Role
 	{
 		#region Model
+		/// <summary>
+		/// 角色编号
+		/// </summary>
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("RoleId", Order = 0)]
 		public int? RoleId
 		{
@@ -15,6 +21,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 角色名称
+		/// </summary>
 		[Column("RoleName")]
 		public string RoleName
 		{
@@ -22,6 +31,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 创建时间
+		/// </summary>
 		[Column("CreateTime")]
 		public DateTime? CreateTime
 		{
@@ -29,6 +41,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 修改时间
+		/// </summary>
 		[Column("UpdateTime")]
 		public DateTime? UpdateTime
 		{
@@ -36,6 +51,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 创建用户编号
+		/// </summary>
 		[Column("CreateByUserId")]
 		public int? CreateByUserId
 		{

@@ -4,10 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudManagement.Models
 {
+	/// <summary>
+	/// 操作日志表
+	/// </summary>
 	[Table("OperationLog")]
 	public class OperationLog
 	{
 		#region Model
+		/// <summary>
+		/// 操作日志编号
+		/// </summary>
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("OperationLogId", Order = 0)]
 		public int? OperationLogId
 		{
@@ -15,6 +21,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 日志内容
+		/// </summary>
 		[Column("Context")]
 		public string Context
 		{
@@ -22,6 +31,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 日志添加时间
+		/// </summary>
 		[Column("CreateTime")]
 		public DateTime? CreateTime
 		{
@@ -29,6 +41,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 操作类型编号
+		/// </summary>
 		[Column("OperationTypeId")]
 		public int? OperationTypeId
 		{
@@ -36,6 +51,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 用户编号
+		/// </summary>
 		[Column("UserId")]
 		public int? UserId
 		{

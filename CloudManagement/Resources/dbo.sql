@@ -11,7 +11,7 @@ Target Server Type    : SQL Server
 Target Server Version : 110000
 File Encoding         : 65001
 
-Date: 2017-09-21 20:23:02
+Date: 2017-09-21 20:24:21
 */
 
 
@@ -114,6 +114,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'用户编号'
 GO
 
 -- ----------------------------
+-- Records of OperationLog
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[OperationLog] ON
+GO
+SET IDENTITY_INSERT [dbo].[OperationLog] OFF
+GO
+
+-- ----------------------------
 -- Table structure for OperationType
 -- ----------------------------
 DROP TABLE [dbo].[OperationType]
@@ -179,6 +187,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'类型代码'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'OperationType'
 , @level2type = 'COLUMN', @level2name = N'TypeCode'
+GO
+
+-- ----------------------------
+-- Records of OperationType
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[OperationType] ON
+GO
+SET IDENTITY_INSERT [dbo].[OperationType] OFF
 GO
 
 -- ----------------------------
@@ -262,6 +278,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'服务编号'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'Permission'
 , @level2type = 'COLUMN', @level2name = N'ServiceId'
+GO
+
+-- ----------------------------
+-- Records of Permission
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[Permission] ON
+GO
+SET IDENTITY_INSERT [dbo].[Permission] OFF
 GO
 
 -- ----------------------------
@@ -363,6 +387,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'创建用户�
 GO
 
 -- ----------------------------
+-- Records of Role
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[Role] ON
+GO
+SET IDENTITY_INSERT [dbo].[Role] OFF
+GO
+
+-- ----------------------------
 -- Table structure for RolePermissionMapping
 -- ----------------------------
 DROP TABLE [dbo].[RolePermissionMapping]
@@ -431,6 +463,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'权限编号'
 GO
 
 -- ----------------------------
+-- Records of RolePermissionMapping
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[RolePermissionMapping] ON
+GO
+SET IDENTITY_INSERT [dbo].[RolePermissionMapping] OFF
+GO
+
+-- ----------------------------
 -- Table structure for Service
 -- ----------------------------
 DROP TABLE [dbo].[Service]
@@ -496,6 +536,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'服务代码'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'Service'
 , @level2type = 'COLUMN', @level2name = N'ServiceCode'
+GO
+
+-- ----------------------------
+-- Records of Service
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[Service] ON
+GO
+SET IDENTITY_INSERT [dbo].[Service] OFF
 GO
 
 -- ----------------------------
@@ -594,6 +642,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'创建人'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'Tenant'
 , @level2type = 'COLUMN', @level2name = N'CreateByUserId'
+GO
+
+-- ----------------------------
+-- Records of Tenant
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[Tenant] ON
+GO
+SET IDENTITY_INSERT [dbo].[Tenant] OFF
 GO
 
 -- ----------------------------
@@ -860,6 +916,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'经营范围'
 GO
 
 -- ----------------------------
+-- Records of TenantDetail
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[TenantDetail] ON
+GO
+SET IDENTITY_INSERT [dbo].[TenantDetail] OFF
+GO
+
+-- ----------------------------
 -- Table structure for ThirdPartyService
 -- ----------------------------
 DROP TABLE [dbo].[ThirdPartyService]
@@ -940,6 +1004,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'绑定令牌'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'ThirdPartyService'
 , @level2type = 'COLUMN', @level2name = N'BindToken'
+GO
+
+-- ----------------------------
+-- Records of ThirdPartyService
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[ThirdPartyService] ON
+GO
+SET IDENTITY_INSERT [dbo].[ThirdPartyService] OFF
 GO
 
 -- ----------------------------
@@ -1068,6 +1140,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'用户所在�
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'User'
 , @level2type = 'COLUMN', @level2name = N'TenantId'
+GO
+
+-- ----------------------------
+-- Records of User
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[User] ON
+GO
+SET IDENTITY_INSERT [dbo].[User] OFF
 GO
 
 -- ----------------------------
@@ -1349,6 +1429,17 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'邮政编码'
 GO
 
 -- ----------------------------
+-- Records of UserDetail
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[UserDetail] ON
+GO
+INSERT INTO [dbo].[UserDetail] ([UserDetailId], [UserPrincipalName], [AccountEnabled], [Password], [MailNickname], [DisplayName], [GivenName], [Surname], [JobTitle], [Department], [StreetAddress], [City], [State], [Country], [PhysicalDeliveryOfficeName], [TelephoneNumber], [PostalCode]) VALUES (N'1', N'caixiangwei@beyondsoft.com', N'激活', N'caixiangwei20171001', N'v-caxian', N'蔡祥伟', N'祥伟', N'蔡', N'软件工程师', N'APEX', N'东川路555号紫竹科学园区', N'上海', N'上海', N'中国', N'10010010001', N'20020020002', N'200241')
+GO
+GO
+SET IDENTITY_INSERT [dbo].[UserDetail] OFF
+GO
+
+-- ----------------------------
 -- Table structure for UserGroup
 -- ----------------------------
 DROP TABLE [dbo].[UserGroup]
@@ -1447,6 +1538,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'创建用户�
 GO
 
 -- ----------------------------
+-- Records of UserGroup
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[UserGroup] ON
+GO
+SET IDENTITY_INSERT [dbo].[UserGroup] OFF
+GO
+
+-- ----------------------------
 -- Table structure for UserGroupRoleMapping
 -- ----------------------------
 DROP TABLE [dbo].[UserGroupRoleMapping]
@@ -1515,6 +1614,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'角色编号'
 GO
 
 -- ----------------------------
+-- Records of UserGroupRoleMapping
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[UserGroupRoleMapping] ON
+GO
+SET IDENTITY_INSERT [dbo].[UserGroupRoleMapping] OFF
+GO
+
+-- ----------------------------
 -- Table structure for UserThirdPartyServiceMapping
 -- ----------------------------
 DROP TABLE [dbo].[UserThirdPartyServiceMapping]
@@ -1580,6 +1687,14 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'第三方服�
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'UserThirdPartyServiceMapping'
 , @level2type = 'COLUMN', @level2name = N'ThirdPartyServiceId'
+GO
+
+-- ----------------------------
+-- Records of UserThirdPartyServiceMapping
+-- ----------------------------
+SET IDENTITY_INSERT [dbo].[UserThirdPartyServiceMapping] ON
+GO
+SET IDENTITY_INSERT [dbo].[UserThirdPartyServiceMapping] OFF
 GO
 
 -- ----------------------------

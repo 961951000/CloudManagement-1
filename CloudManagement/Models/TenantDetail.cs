@@ -4,10 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudManagement.Models
 {
+	/// <summary>
+	/// 租户详细信息表
+	/// </summary>
 	[Table("TenantDetail")]
 	public class TenantDetail
 	{
 		#region Model
+		/// <summary>
+		/// 租户详细信息编号
+		/// </summary>
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("TenantDetailId", Order = 0)]
 		public int? TenantDetailId
 		{
@@ -15,6 +21,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 租户名称
+		/// </summary>
 		[Column("TenantPrincipalName")]
 		public string TenantPrincipalName
 		{
@@ -22,6 +31,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 统一社会信用码/注册号
+		/// </summary>
 		[Column("RegistrationNumber")]
 		public string RegistrationNumber
 		{
@@ -29,6 +41,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 工商营业执照
+		/// </summary>
 		[Column("BusinessLicense")]
 		public string BusinessLicense
 		{
@@ -36,6 +51,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 组织机构代码
+		/// </summary>
 		[Column("OrganizationCode")]
 		public string OrganizationCode
 		{
@@ -43,6 +61,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 税务登记证
+		/// </summary>
 		[Column("TaxRegistrationCertificate")]
 		public string TaxRegistrationCertificate
 		{
@@ -50,6 +71,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 法定代表人姓名
+		/// </summary>
 		[Column("LegalRepresentative")]
 		public string LegalRepresentative
 		{
@@ -57,6 +81,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 住所
+		/// </summary>
 		[Column("Address")]
 		public string Address
 		{
@@ -64,6 +91,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 注册资本
+		/// </summary>
 		[Column("RegisteredCapital")]
 		public string RegisteredCapital
 		{
@@ -71,6 +101,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 企业状态
+		/// </summary>
 		[Column("EnterpriseStatus")]
 		public string EnterpriseStatus
 		{
@@ -78,6 +111,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 公司类型
+		/// </summary>
 		[Column("CompanyType")]
 		public string CompanyType
 		{
@@ -85,6 +121,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 成立日期
+		/// </summary>
 		[Column("EstablishmentDate")]
 		public DateTime? EstablishmentDate
 		{
@@ -92,6 +131,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 营业期限
+		/// </summary>
 		[Column("BusinessTerm")]
 		public string BusinessTerm
 		{
@@ -99,6 +141,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 登记机关
+		/// </summary>
 		[Column("RegistrationAuthority")]
 		public string RegistrationAuthority
 		{
@@ -106,6 +151,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 受理机关
+		/// </summary>
 		[Column("AcceptingOrgans")]
 		public string AcceptingOrgans
 		{
@@ -113,6 +161,9 @@ namespace CloudManagement.Models
 			get;
 		}
 
+		/// <summary>
+		/// 经营范围
+		/// </summary>
 		[Column("BusinessScope")]
 		public string BusinessScope
 		{
