@@ -11,7 +11,7 @@ Target Server Type    : SQL Server
 Target Server Version : 110000
 File Encoding         : 65001
 
-Date: 2017-09-24 21:05:02
+Date: 2017-09-26 02:46:42
 */
 
 
@@ -189,6 +189,7 @@ GO
 CREATE TABLE [dbo].[Permission] (
 [PermissionId] int NOT NULL IDENTITY(1,1) ,
 [PermissionName] varchar(255) NULL ,
+[Description] varchar(255) NULL ,
 [PermissionCode] varchar(255) NULL ,
 [ServiceId] int NOT NULL 
 )
@@ -234,6 +235,20 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'权限名称'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'Permission'
 , @level2type = 'COLUMN', @level2name = N'PermissionName'
+GO
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'dbo', 
+'TABLE', N'Permission', 
+'COLUMN', N'Description')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'描述'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'Permission'
+, @level2type = 'COLUMN', @level2name = N'Description'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'描述'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'Permission'
+, @level2type = 'COLUMN', @level2name = N'Description'
 GO
 IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
 'SCHEMA', N'dbo', 
@@ -1092,7 +1107,8 @@ CREATE TABLE [dbo].[UserDetail] (
 [Country] varchar(255) NULL ,
 [PhysicalDeliveryOfficeName] varchar(255) NULL ,
 [TelephoneNumber] varchar(255) NULL ,
-[PostalCode] varchar(255) NULL 
+[PostalCode] varchar(255) NULL ,
+[Photo] varchar(255) NULL 
 )
 
 
@@ -1346,6 +1362,20 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'邮政编码'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'UserDetail'
 , @level2type = 'COLUMN', @level2name = N'PostalCode'
+GO
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'dbo', 
+'TABLE', N'UserDetail', 
+'COLUMN', N'Photo')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'头像'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'UserDetail'
+, @level2type = 'COLUMN', @level2name = N'Photo'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'头像'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'UserDetail'
+, @level2type = 'COLUMN', @level2name = N'Photo'
 GO
 
 -- ----------------------------

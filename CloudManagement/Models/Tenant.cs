@@ -62,10 +62,7 @@ namespace CloudManagement.Models
             get;
         }
 
-        /// <summary>
-        /// 用户信息
-        /// </summary>
-        public IEnumerable<User> User { get; set; }
+        #region Navigation properties
 
         /// <summary>
         /// 租户详细信息
@@ -78,6 +75,8 @@ namespace CloudManagement.Models
         /// </summary>
         [ForeignKey("CreateByUserId")]
         public User CreateByUser { get; set; }
+
+        #endregion
 
         public override string ToString()
         {

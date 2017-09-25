@@ -32,6 +32,16 @@ namespace CloudManagement.Models
         }
 
         /// <summary>
+        /// 描述
+        /// </summary>
+        [Column("Description")]
+        public string Description
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// 权限代码
         /// </summary>
         [Column("PermissionCode")]
@@ -53,7 +63,7 @@ namespace CloudManagement.Models
 
         public override string ToString()
         {
-            return "PermissionId=" + PermissionId + ",PermissionName=" + PermissionName + ",PermissionCode=" + PermissionCode + ",ServiceId=" + ServiceId;
+            return "PermissionId=" + PermissionId + ",PermissionName=" + PermissionName + ",Description=" + Description + ",PermissionCode =" + PermissionCode + ",ServiceId=" + ServiceId;
         }
         #endregion Model
     }

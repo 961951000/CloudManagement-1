@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace CloudManagement.Models
 {
     /// <summary>
     /// 用户信息表
     /// </summary>
-    [Table("User")]
+    [Table("User", Schema = "dbo")]
     public class User
     {
         #region Model
@@ -84,28 +85,32 @@ namespace CloudManagement.Models
             get;
         }
 
+        #region Navigation properties
+
         /// <summary>
         /// 用户详细信息
         /// </summary>
         [ForeignKey("UserDetailId")]
-        public UserDetail UserDetail { get; set; }
+        public virtual UserDetail UserDetail { get; set; }
 
         /// <summary>
         /// 用户组信息
         /// </summary>
-        [ForeignKey("UserGroupId")]
-        public IEnumerable<UserGroup> UserGroup { get; set; }
+        [ForeignKey("UserGroupId"), IgnoreDataMember]
+        public virtual ICollection<UserGroup> UserGroup { get; set; }
 
         /// <summary>
         /// 租户信息
         /// </summary>
-        [ForeignKey("TenantId")]
-        public IEnumerable<Tenant> Tenant { get; set; }
+        [ForeignKey("TenantId"), IgnoreDataMember]
+        public virtual ICollection<Tenant> Tenant { get; set; }
 
-        //public override string ToString()
-        //{
-        //    return "UserId=" + UserId + ",Token=" + Token + ",CreateTime=" + CreateTime + ",UpdateTime=" + UpdateTime + ",UserDetailId=" + UserDetailId + ",UserGroupId=" + UserGroupId + ",TenantId=" + TenantId;
-        //}
+        #endregion
+
+        public override string ToString()
+        {
+            return "UserId=" + UserId + ",Token=" + Token + ",CreateTime=" + CreateTime + ",UpdateTime=" + UpdateTime + ",UserDetailId=" + UserDetailId + ",UserGroupId=" + UserGroupId + ",TenantId=" + TenantId;
+        }
         #endregion Model
     }
 }

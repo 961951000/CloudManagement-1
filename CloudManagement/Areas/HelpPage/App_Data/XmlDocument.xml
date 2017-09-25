@@ -481,6 +481,18 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:CloudManagement.Controllers.FileController">
+            <summary>
+            文件控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.FileController.GetFile(System.String)">
+            <summary>
+            根据文件名获得文件
+            </summary>
+            <param name="fileName">文件名</param>
+            <returns>文件</returns>
+        </member>
         <member name="T:CloudManagement.Controllers.OperationLogController">
             <summary>
             操作日志控制器
@@ -981,7 +993,7 @@
             <param name="id">租户编号</param>
             <returns>租户用户列表</returns>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.AddUser(System.Int32,CloudManagement.Models.UserDetail)">
+        <member name="M:CloudManagement.Controllers.UserController.AddUserByTenant(System.Int32,CloudManagement.Models.UserDetail)">
             <summary>
             由租户添加用户
             </summary>
@@ -1021,6 +1033,13 @@
             <param name="userIdList">用户编号列表</param>
             <returns>写入基础数据库的状态项数</returns>
         </member>
+        <member name="M:CloudManagement.Controllers.UserController.GetUserListByUserGroup(CloudManagement.Models.UserGroup)">
+            <summary>
+            由分组获取用户列表
+            </summary>
+            <param name="userGroup">用户分组</param>
+            <returns>分组用户列表</returns>
+        </member>
         <member name="M:CloudManagement.Controllers.UserController.MoveInUserByUserGroup(System.Int32,System.Int32)">
             <summary>
             由分组移入用户
@@ -1058,6 +1077,13 @@
             添加用户
             </summary>
             <param name="userDetail">用户详细信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.AddUserList(System.Collections.Generic.IEnumerable{CloudManagement.Models.UserDetail})">
+            <summary>
+            添加用户列表
+            </summary>
+            <param name="userDetailList">用户详细信息列表</param>
             <returns>写入基础数据库的状态项数</returns>
         </member>
         <member name="M:CloudManagement.Controllers.UserController.Update(System.Int32,CloudManagement.Models.User)">
@@ -1194,6 +1220,17 @@
             <param name="token">The token value.</param>
             <param name="endpoint">The endpoint.</param>
             <returns></returns>
+        </member>
+        <member name="P:CloudManagement.Helper.IOHelper.RootPath">
+            <summary>
+            网站根目录
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Helper.IOHelper.CreateDirectoryIfNotExist(System.String)">
+            <summary>
+            创建目录如果不存在
+            </summary>
+            <param name="filePath">文件路径</param>
         </member>
         <member name="T:CloudManagement.Models.OperationLog">
             <summary>
@@ -1383,11 +1420,6 @@
         <member name="P:CloudManagement.Models.Tenant.CreateByUserId">
             <summary>
             创建人
-            </summary>
-        </member>
-        <member name="P:CloudManagement.Models.Tenant.User">
-            <summary>
-            用户信息
             </summary>
         </member>
         <member name="P:CloudManagement.Models.Tenant.TenantDetail">

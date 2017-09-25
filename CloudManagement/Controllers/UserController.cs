@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CloudManagement.Helper;
-using System.Web.Http.Results;
 using Newtonsoft.Json;
 
 namespace CloudManagement.Controllers
@@ -38,13 +37,20 @@ namespace CloudManagement.Controllers
         /// <returns>用户列表</returns>
         public async Task<HttpResponseMessage> GetUserList()
         {
-            var result = await _db.User.ToListAsync();
-            foreach (var user in result)
+            try
             {
-                user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
-            }
+                var result = await _db.User.AnyAsync() ? await _db.User.ToListAsync() : new List<User>();
+                foreach (var user in result)
+                {
+                    user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
+                }
 
-            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         /// <summary>
@@ -54,10 +60,17 @@ namespace CloudManagement.Controllers
         /// <returns>用户信息</returns>
         public async Task<HttpResponseMessage> GetUserByUserId(int id)
         {
-            var result = await _db.User.SingleAsync(x => x.UserGroupId == id);
-            result.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == result.UserDetailId);
+            try
+            {
+                var result = await _db.User.SingleAsync(x => x.UserGroupId == id);
+                result.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == result.UserDetailId);
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         /// <summary>
@@ -67,12 +80,20 @@ namespace CloudManagement.Controllers
         /// <returns>用户信息</returns>
         public async Task<HttpResponseMessage> GetUserByUserPrincipalName(string userPrincipalName)
         {
-            var userDetail = await _db.UserDetail.SingleAsync(x => x.UserPrincipalName == userPrincipalName);
-            var result = await _db.User.SingleAsync(x => x.UserDetailId == userDetail.UserDetailId);
-            result.UserDetail = userDetail;
+            try
+            {
+                var userDetail = await _db.UserDetail.SingleAsync(x => x.UserPrincipalName == userPrincipalName);
+                var result = await _db.User.SingleAsync(x => x.UserDetailId == userDetail.UserDetailId);
+                result.UserDetail = userDetail;
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
+
         /// <summary>
         /// 由租户获取用户列表
         /// </summary>
@@ -80,13 +101,20 @@ namespace CloudManagement.Controllers
         /// <returns>租户用户列表</returns>
         public async Task<HttpResponseMessage> GetUserListByTenant(int id)
         {
-            var result = _db.User.Where(x => x.TenantId == id);
-            foreach (var user in result)
+            try
             {
-                user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
-            }
+                var result = _db.User.Where(x => x.TenantId == id);
+                foreach (var user in result)
+                {
+                    user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
+                }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         /// <summary>
@@ -95,18 +123,31 @@ namespace CloudManagement.Controllers
         /// <param name="id">租户编号</param>
         /// <param name="userDetail">用户详细信息</param>
         /// <returns>写入基础数据库的状态项数</returns>
-        public async Task<HttpResponseMessage> AddUser(int id, UserDetail userDetail)
+        [HttpPut]
+        public async Task<HttpResponseMessage> AddUserByTenant(int id, UserDetail userDetail)
         {
+            if (await _db.Tenant.AnyAsync(x => x.TenantId == id))
+            {
+                throw new ArgumentException($"Tenant {id} does not exist.");
+            }
+            if (userDetail == null)
+            {
+                throw new ArgumentException("Parameter userDetail can not empty.");
+            }
+            if (await _db.UserDetail.AnyAsync(x => x.UserPrincipalName == userDetail.UserPrincipalName))
+            {
+                throw new ArgumentException("Duplicate user principal name.");
+            }
             _db.User.Add(new User
             {
                 Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{userDetail.UserPrincipalName}:{userDetail.Password}")),
                 CreateTime = DateTime.Now,
                 UserDetail = userDetail,
-                //Tenant = await _db.Tenant.SingleAsync(x => x.TenantId == id)
+                Tenant = new List<Tenant> { await _db.Tenant.SingleAsync(x => x.TenantId == id) }
             });
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         /// <summary>
@@ -115,14 +156,27 @@ namespace CloudManagement.Controllers
         /// <param name="id">租户编号</param>
         /// <param name="userId">用户编号</param>
         /// <returns>写入基础数据库的状态项数</returns>
+        [HttpPost]
         public async Task<HttpResponseMessage> MoveInUserByTenant(int id, int userId)
         {
+            if (await _db.Tenant.AnyAsync(x => x.TenantId == id))
+            {
+                throw new ArgumentException($"Tenant {id} does not exist.");
+            }
+            if (await _db.User.AnyAsync(x => x.UserId == userId))
+            {
+                throw new ArgumentException($"User {userId} does not exist.");
+            }
+            if (await _db.User.AnyAsync(x => x.UserId == userId && x.TenantId != null))
+            {
+                throw new ArgumentException($"User {userId} has joined the tenant");
+            }
             var user = await _db.User.SingleAsync(x => x.UserId == userId);
             user.TenantId = id;
             user.UpdateTime = DateTime.Now;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         /// <summary>
@@ -149,6 +203,14 @@ namespace CloudManagement.Controllers
         /// <returns>写入基础数据库的状态项数</returns>
         public async Task<HttpResponseMessage> ImportUserByTenant(int id, IList<int> userIdList)
         {
+            if (await _db.Tenant.AnyAsync(x => x.TenantId == id))
+            {
+                throw new ArgumentException($"Tenant {id} does not exist.");
+            }
+            if (userIdList == null || !userIdList.Any())
+            {
+                throw new ArgumentException("Parameter userIdList can not empty.");
+            }
             var userList = await _db.User.Where(x => userIdList.Contains((int)x.UserId)).ToListAsync();
             userList.ForEach(x =>
             {
@@ -179,21 +241,21 @@ namespace CloudManagement.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
 
-        ///// <summary>
-        ///// 由分组获取用户列表
-        ///// </summary>
-        ///// <param name="userGroup">用户分组</param>
-        ///// <returns>分组用户列表</returns>
-        //public async Task<HttpResponseMessage> GetUserListByUserGroup(UserGroup userGroup)
-        //{
-        //    var result = _db.User.Where(x => x.UserGroupId == userGroup.UserGroupId);
-        //    foreach (var user in result)
-        //    {
-        //        user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
-        //    }
+        /// <summary>
+        /// 由分组获取用户列表
+        /// </summary>
+        /// <param name="userGroup">用户分组</param>
+        /// <returns>分组用户列表</returns>
+        public async Task<HttpResponseMessage> GetUserListByUserGroup(UserGroup userGroup)
+        {
+            var result = _db.User.Where(x => x.UserGroupId == userGroup.UserGroupId);
+            foreach (var user in result)
+            {
+                user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
+            }
 
-        //    return Request.CreateResponse(HttpStatusCode.OK, Json(result));
-        //}
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+        }
 
         /// <summary>
         /// 由分组移入用户
@@ -270,8 +332,17 @@ namespace CloudManagement.Controllers
         /// </summary>
         /// <param name="userDetail">用户详细信息</param>
         /// <returns>写入基础数据库的状态项数</returns>
+        [HttpPut]
         public async Task<HttpResponseMessage> AddUser(UserDetail userDetail)
         {
+            if (userDetail == null)
+            {
+                throw new ArgumentException("Parameter userDetail userDetailsList can not empty.");
+            }
+            if (await _db.UserDetail.AnyAsync(x => x.UserPrincipalName == userDetail.UserPrincipalName))
+            {
+                throw new ArgumentException("Duplicate user principal name.");
+            }
             //Basic Y2FpeGlhbmd3ZWlAYmV5b25kc29mdC5jb206Y2FpeGlhbmd3ZWkyMDE3MTAwMQ==
             var user = new User
             {
@@ -286,13 +357,47 @@ namespace CloudManagement.Controllers
         }
 
         /// <summary>
+        /// 添加用户列表
+        /// </summary>
+        /// <param name="userDetailList">用户详细信息列表</param>
+        /// <returns>写入基础数据库的状态项数</returns>
+        [HttpPut]
+        public async Task<HttpResponseMessage> AddUserList(IEnumerable<UserDetail> userDetailList)
+        {
+            var userDetails = userDetailList as UserDetail[] ?? userDetailList.ToArray();
+            if (userDetailList == null || !userDetails.Any())
+            {
+                throw new ArgumentException("Parameter userDetailsList can not empty.");
+            }
+            var userList = userDetails.Select(userDetail => new User
+            {
+                Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{userDetail.UserPrincipalName}:{userDetail.Password}")),
+                CreateTime = DateTime.Now,
+                UserDetail = userDetail
+            });
+            _db.User.AddRange(userList);
+            var result = await _db.SaveChangesAsync();
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="id">用户编号</param>
         /// <param name="user">用户信息</param>
         /// <returns>写入基础数据库的状态项数</returns>
+        [HttpPut]
         public async Task<HttpResponseMessage> Update(int id, User user)
         {
+            if (await _db.User.AnyAsync(x => x.UserId == id))
+            {
+                throw new ArgumentException($"User {id} does not exist.");
+            }
+            if (user?.UserDetail == null)
+            {
+                throw new ArgumentException("Lack of user information.");
+            }
             user.UserId = id;
             user.Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserDetail.UserPrincipalName}:{user.UserDetail.Password}"));
             user.UpdateTime = DateTime.Now;
@@ -307,24 +412,22 @@ namespace CloudManagement.Controllers
         /// </summary>
         /// <param name="id">用户编号</param>
         /// <returns>写入基础数据库的状态项数</returns>
-        [HttpDelete]
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            int result;
             try
             {
                 var user = await _db.User.SingleAsync(x => x.UserId == id);
                 user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
                 _db.UserDetail.Remove(user.UserDetail);
                 _db.User.Remove(user);
-                result = await _db.SaveChangesAsync();
+                var result = await _db.SaveChangesAsync();
+
+                return Request.CreateResponse(HttpStatusCode.OK, result);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
                 throw new ArgumentException(ex.Message);
             }
-
-            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         /// <summary>
@@ -336,8 +439,6 @@ namespace CloudManagement.Controllers
         [HttpGet, HttpPost]
         public async Task<HttpResponseMessage> Login(string username, string password)
         {
-            int result;
-            string token;
             try
             {
                 var user = await _db.User.Join(
@@ -345,17 +446,16 @@ namespace CloudManagement.Controllers
                  x => x.UserDetailId,
                  y => y.UserDetailId,
                  (x, y) => x).SingleAsync();
-                result = (int)user.UserId;
-                token = user.Token;
+                var result = user.UserId;
+                var response = Request.CreateResponse(HttpStatusCode.OK, result);
+                response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + user.Token);
+
+                return response;
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
                 throw new ArgumentException(ex.Message);
             }
-            var response = Request.CreateResponse(HttpStatusCode.OK, result);
-            response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
-
-            return response;
         }
 
         /// <summary>
@@ -365,24 +465,24 @@ namespace CloudManagement.Controllers
         /// <returns>用户编号</returns>
         public async Task<HttpResponseMessage> LoginByToken(string token)
         {
-            int result;
             try
             {
-                if (token.StartsWith(HttpExtensionMethods.AuthenticationType))
+                if (string.IsNullOrWhiteSpace(token) || !token.StartsWith(HttpExtensionMethods.AuthenticationType))
                 {
-                    token = token.Substring(HttpExtensionMethods.AuthenticationType.Length);
+                    throw new ArgumentException("Invalid token");
                 }
+                token = token.Substring(HttpExtensionMethods.AuthenticationType.Length);
                 var user = await _db.User.SingleAsync(x => x.Token == token);
-                result = (int)user.UserId;
+                var result = user.UserId;
+                var response = Request.CreateResponse(HttpStatusCode.OK, result);
+                response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
+
+                return response;
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
                 throw new ArgumentException(ex.Message);
             }
-            var response = Request.CreateResponse(HttpStatusCode.OK, result);
-            response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
-
-            return response;
         }
     }
 }

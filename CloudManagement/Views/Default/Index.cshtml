@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View</title>
+</head>
+<body>
+    <div>
+        <form action="../api/File/FilesUpload" method="post" enctype="multipart/form-data">
+            <input type="file" name="fileUpload" />
+            <input type="submit" value="上传文件" />
+        </form>
+    </div>
+</body>
+</html>

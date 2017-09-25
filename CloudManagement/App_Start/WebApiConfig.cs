@@ -3,6 +3,7 @@ using CloudManagement.Filters.Action;
 using CloudManagement.Filters.Authentication;
 using CloudManagement.Filters.Handler;
 using System.Net.Http.Headers;
+using System.Web.Http.Cors;
 
 namespace CloudManagement
 {
@@ -16,6 +17,9 @@ namespace CloudManagement
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+
+            //跨域配置
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
