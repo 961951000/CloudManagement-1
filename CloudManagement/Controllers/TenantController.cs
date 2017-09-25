@@ -1,18 +1,12 @@
 ﻿using CloudManagement.DatabaseContext;
-using CloudManagement.Filters.Authentication;
-using CloudManagement.Helpers;
 using CloudManagement.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 
 namespace CloudManagement.Controllers
@@ -23,98 +17,125 @@ namespace CloudManagement.Controllers
     public class TenantController : ApiController
     {
         private readonly SqlServerContext _db;
-        private readonly string _endpoint;
+        //private readonly string _endpoint= HttpContext.Current.Request.Url.Host;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public TenantController() : this(new SqlServerContext(), HttpContext.Current.Request.Url.Host) { }
+        public TenantController() : this(new SqlServerContext()) { }
 
-        internal TenantController(SqlServerContext db, string endpoint)
+        internal TenantController(SqlServerContext db)
         {
             _db = db;
-            _endpoint = endpoint;
         }
 
-        public async Task<HttpResponseMessage> Get()
+        /// <summary>
+        /// 获取租户列表
+        /// </summary>
+        /// <returns>租户列表</returns>
+        public async Task<HttpResponseMessage> GetTenantList()
         {
-            var result = _db.Tenant.ToList();
-            foreach (var item in result)
+            var result = _db.Tenant;
+            foreach (var tenant in result)
             {
-                item.TenantDetail = _db.TenantDetail.Single(x => x.TenantDetailId == item.TenantDetailId);
-                item.CreateByUser = _db.User.Single(x => x.UserId == item.CreateByUserId);
+                tenant.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == tenant.TenantDetailId);
             }
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(new User { UserDetail = new UserDetail() })));
+
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
 
-        public async Task<HttpResponseMessage> Register(TenantDetail tenantDetail)
+        /// <summary>
+        /// 由租户编号获取租户信息
+        /// </summary>
+        /// <param name="id">租户编号</param>
+        /// <returns>租户信息</returns>
+        public async Task<HttpResponseMessage> GetTenantByTenantId(int id)
         {
-            return await Add(new Tenant { TenantDetail = tenantDetail });
+            var result = await _db.Tenant.SingleAsync(x => x.TenantId == id);
+            result.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == result.TenantDetailId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
 
-        public async Task<HttpResponseMessage> Add(Tenant tenant)
+        /// <summary>
+        /// 由创建用户获取租户列表
+        /// </summary>
+        /// <param name="id">创建用户编号</param>
+        /// <returns>租户列表</returns>
+        public async Task<HttpResponseMessage> GetTenantListByCreateByUser(int id)
         {
+            var result = await _db.Tenant.Where(x => x.CreateByUserId == id).ToListAsync();
+
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+        }
+
+        /// <summary>
+        /// 由租户名称获取租户列表
+        /// </summary>
+        /// <param name="tenantPrincipalName">租户名称</param>
+        /// <returns>租户列表</returns>
+        public async Task<HttpResponseMessage> GetTenantListByTenantPrincipalName(string tenantPrincipalName)
+        {
+            var tenantDetailList = _db.TenantDetail.Where(x => x.TenantPrincipalName == tenantPrincipalName);
+            var result = new List<Tenant>();
+            foreach (var tenantDetail in tenantDetailList)
+            {
+                var tenant = await _db.Tenant.SingleAsync(x => x.TenantDetailId == tenantDetail.TenantDetailId);
+                tenant.TenantDetail = tenantDetail;
+                result.Add(tenant);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+        }
+
+        /// <summary>
+        /// 添加租户
+        /// </summary>
+        /// <param name="id">创建人用户编号</param>
+        /// <param name="tenantDetail">租户详细信息</param>
+        /// <returns>写入基础数据库的状态项数</returns>
+        public async Task<HttpResponseMessage> AddTenant(int id, TenantDetail tenantDetail)
+        {
+            var tenant = new Tenant
+            {
+                CreateByUserId = id,
+                CreateTime = DateTime.Now,
+                TenantDetail = tenantDetail
+            };
             _db.Tenant.Add(tenant);
-            var result = _db.SaveChanges();
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, Json(tenant.TenantId)));
+            var result = await _db.SaveChangesAsync();
+
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
 
-        public async Task<HttpResponseMessage> Delete(int id)
-        {
-            var tenant = _db.Tenant.Single(x => x.TenantId == id);
-            _db.Tenant.Remove(tenant);
-            var result = _db.SaveChanges();
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, Json(result)));
-        }
-
+        /// <summary>
+        /// 更新租户信息
+        /// </summary>
+        /// <param name="id">租户编号</param>
+        /// <param name="tenant">租户信息</param>
+        /// <returns>写入基础数据库的状态项数</returns>
         public async Task<HttpResponseMessage> Update(int id, Tenant tenant)
         {
             tenant.TenantId = id;
+            tenant.UpdateTime = DateTime.Now;
             _db.Entry(tenant).State = EntityState.Modified;
-            var result = _db.SaveChanges();
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, Json(result)));
+            var result = await _db.SaveChangesAsync();
+
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
 
-        public async Task<HttpResponseMessage> AddUser(UserDetail userDetail)
+        /// <summary>
+        /// 删除租户
+        /// </summary>
+        /// <param name="id">租户编号</param>
+        /// <returns>写入基础数据库的状态项数</returns>
+        public async Task<HttpResponseMessage> Delete(int id)
         {
-            var requestUrl = "User/Register";
-            var token = Request.Headers.Authorization.Parameter;
+            var tenant = await _db.Tenant.SingleAsync(x => x.TenantId == id);
+            _db.Tenant.Remove(tenant);
+            var result = await _db.SaveChangesAsync();
 
-            var response = await requestUrl.ExecutePostServiceCall(token, _endpoint, userDetail).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync();
-
-            var createByUser = _db.User.Single(x => x.Token == token);
-            var tenant = _db.Tenant.Single(x => x.CreateByUserId == createByUser.UserId);
-            tenant.User = _db.User.Where(x => x.TenantId == tenant.TenantId).ToList();
-            var user = new User { UserDetail = userDetail };
-            tenant.User.Add(user);
-            _db.Entry(tenant).State = EntityState.Modified;
-            var result = _db.SaveChanges();
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, Json(result)));
-        }
-
-        public async Task<HttpResponseMessage> MoveInUser(int id)
-        {
-            var token = Request.Headers.Authorization.Parameter;
-            var createByUser = _db.User.Single(x => x.Token == token);
-            var tenant = _db.Tenant.Single(x => x.CreateByUserId == createByUser.UserId);
-            tenant.User = _db.User.Where(x => x.TenantId == tenant.TenantId).ToList();
-            var user = _db.User.Single(x => x.UserId == id);
-            tenant.User.Add(user);
-            _db.Entry(tenant).State = EntityState.Modified;
-            var result = _db.SaveChanges();
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, Json(result)));
-        }
-
-        public async Task<HttpResponseMessage> MoveOnUser(int id)
-        {
-            var token = Request.Headers.Authorization.Parameter;
-            var createByUser = _db.User.Single(x => x.Token == token);
-            var tenant = _db.Tenant.Single(x => x.CreateByUserId == createByUser.UserId);
-            tenant.User = _db.User.Where(x => x.TenantId == tenant.TenantId && x.UserId != id).ToList();
-            _db.Entry(tenant).State = EntityState.Modified;
-            var result = _db.SaveChanges();
-            return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, Json(result)));
+            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
     }
 }

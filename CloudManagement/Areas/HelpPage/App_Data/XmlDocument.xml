@@ -481,6 +481,471 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:CloudManagement.Controllers.OperationLogController">
+            <summary>
+            操作日志控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationLogController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationLogController.AddService(CloudManagement.Models.OperationLog)">
+            <summary>
+            添加操作日志
+            </summary>
+            <param name="operationLog">服务信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.OperationTypeController">
+            <summary>
+            操作类型控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationTypeController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationTypeController.AddOperationType(CloudManagement.Models.OperationType)">
+             <summary>
+            操作类型
+             </summary>
+             <param name="operationType">操作类型</param>
+             <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationTypeController.GetOperationTypeByOperationTypeId(System.Int32)">
+            <summary>
+            由操作类型编号获取操作类型信息
+            </summary>
+            <param name="id">操作类型编号</param>
+            <returns>操作类型信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationTypeController.GetOperationTypeByOperationTypeCode(System.String)">
+            <summary>
+            由操作类型代码获取用户信息
+            </summary>
+            <param name="typeCode">操作类型代码</param>
+            <returns>操作类型信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.OperationTypeController.GetOperationTypeByOperationTypeName(System.String)">
+            <summary>
+            由操作类型名称获取操作类型列表
+            </summary>
+            <param name="operationTypeName">操作类型名称</param>
+            <returns>操作类型列表</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.PermissionController">
+            <summary>
+            权限控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.GetPermissionList">
+            <summary>
+            获取权限列表
+            </summary>
+            <returns>权限列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.GetPermissionByPermissionId(System.Int32)">
+            <summary>
+            由权限编号获取权限信息
+            </summary>
+            <param name="id">权限编号</param>
+            <returns>权限信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.GetPermissionByPermissionCode(System.String)">
+            <summary>
+            由权限代码获取权限信息
+            </summary>
+            <param name="permissionCode">权限代码</param>
+            <returns>权限信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.GetPermissionListByService(System.Int32)">
+            <summary>
+            由服务获取权限列表
+            </summary>
+            <param name="id">服务编号</param>
+            <returns>权限列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.GetPermissionListByRole(System.Int32)">
+            <summary>
+            由角色获取权限列表
+            </summary>
+            <param name="id">角色编号</param>
+            <returns>权限列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.GetGroupListByPermissionName(System.String)">
+            <summary>
+            由权限名称获取权限列表
+            </summary>
+            <param name="permissionName">权限名称</param>
+            <returns>权限列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.MoveInPermissionByRole(System.Int32,System.Int32)">
+            <summary>
+            由角色移入权限
+            </summary>
+            <param name="id">角色编号</param>
+            <param name="permissionId">权限编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.MoveOutPermissionByRole(System.Int32,System.Int32)">
+            <summary>
+            由角色移出权限
+            </summary>
+            <param name="id">角色编号</param>
+            <param name="permissionId">权限编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.ImportPermissionByRole(System.Int32,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            由角色导入权限
+            </summary>
+            <param name="id">角色编号</param>
+            <param name="permissionIdList">权限编号列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.ExportPermissionByRole(System.Int32,System.Linq.IQueryable{System.Int32})">
+            <summary>
+            由角色导出权限
+            </summary>
+            <param name="id">角色编号</param>
+            <param name="permissionIdList">权限编号列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.AddPermission(CloudManagement.Models.Permission)">
+            <summary>
+            添加权限
+            </summary>
+            <param name="permission">权限信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.AddPermissionList(System.Collections.Generic.IList{CloudManagement.Models.Permission})">
+            <summary>
+            添加权限列表
+            </summary>
+            <param name="permissionList">权限列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.AddPermissionByService(System.Int32,CloudManagement.Models.Permission)">
+            <summary>
+            由服务添加权限
+            </summary>
+            <param name="id">服务编号</param>
+            <param name="permission">权限信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.AddPermissionListByService(System.Int32,System.Collections.Generic.IList{CloudManagement.Models.Permission})">
+            <summary>
+            由服务添加权限列表
+            </summary>
+            <param name="id">服务编号</param>
+            <param name="permissionList">权限列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.Update(System.Int32,CloudManagement.Models.Permission)">
+            <summary>
+            更新权限信息
+            </summary>
+            <param name="id">权限编号</param>
+            <param name="permission">权限信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.PermissionController.Delete(System.Int32)">
+            <summary>
+            删除权限
+            </summary>
+            <param name="id">权限编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.RoleController">
+            <summary>
+            角色控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.GetRoleList">
+            <summary>
+            获取角色列表
+            </summary>
+            <returns>角色列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.GetRoleByRoleId(System.Int32)">
+            <summary>
+            由角色编号获取角色信息
+            </summary>
+            <param name="id">角色编号</param>
+            <returns>角色组信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.GetRoleListByCreateByUser(System.Int32)">
+            <summary>
+            由创建用户获取角色列表
+            </summary>
+            <param name="id">角色编号</param>
+            <returns>角色列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.GetRoleListByUserGroup(System.Int32)">
+            <summary>
+            由用户组获取角色列表
+            </summary>
+            <param name="id">用户组编号</param>
+            <returns>角色列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.GetGroupListByRoleName(System.String)">
+            <summary>
+            由角色名称获取角色列表
+            </summary>
+            <param name="roleName">角色名称</param>
+            <returns>角色列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.MoveInRoleByUserGroup(System.Int32,System.Int32)">
+            <summary>
+            由用户组移入角色
+            </summary>
+            <param name="id">用户组编号</param>
+            <param name="roleId">角色编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.MoveOutRoleByUserGroup(System.Int32,System.Int32)">
+            <summary>
+            由用户组移出角色
+            </summary>
+            <param name="id">用户组编号</param>
+            <param name="roleId">角色编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.AddRole(System.Int32,CloudManagement.Models.Role)">
+            <summary>
+            添加角色
+            </summary>
+            <param name="id">创建人用户编号</param>
+            <param name="role">角色信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.Update(System.Int32,CloudManagement.Models.Role)">
+            <summary>
+            更新角色信息
+            </summary>
+            <param name="id">角色编号</param>
+            <param name="role">角色信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.RoleController.Delete(System.Int32)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="id">角色编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.ServiceController">
+            <summary>
+            服务控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.GetServiceList">
+            <summary>
+            获取服务列表
+            </summary>
+            <returns>服务列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.GetServiceByServiceId(System.Int32)">
+            <summary>
+            由服务编号获取服务信息
+            </summary>
+            <param name="id">服务编号</param>
+            <returns>服务信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.GetServiceByServiceCode(System.String)">
+            <summary>
+            由服务代码获取服务信息
+            </summary>
+            <param name="serviceCode">服务代码</param>
+            <returns>服务信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.GetServiceByServiceName(System.String)">
+            <summary>
+            由服务名称获取服务列表
+            </summary>
+            <param name="serviceName">服务名称</param>
+            <returns>服务列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.AddService(CloudManagement.Models.Service)">
+            <summary>
+            添加服务
+            </summary>
+            <param name="service">服务信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.Update(System.Int32,CloudManagement.Models.Service)">
+            <summary>
+            更新服务信息
+            </summary>
+            <param name="id">服务编号</param>
+            <param name="service">服务信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ServiceController.Delete(System.Int32)">
+            <summary>
+            删除服务
+            </summary>
+            <param name="id">服务编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.ThirdPartyServiceController">
+            <summary>
+            第三方服务控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.GetThirdPartyServiceList">
+            <summary>
+            获取第三方服务列表
+            </summary>
+            <returns>第三方服务列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.GetThirdPartyServiceByThirdPartyServiceId(System.Int32)">
+            <summary>
+            由第三方服务编号获取第三方服务信息
+            </summary>
+            <param name="id">第三方服务编号</param>
+            <returns>第三方服务信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.GetThirdPartyServiceByThirdPartyServiceCode(System.String)">
+            <summary>
+            由第三方服务代码获取第三方服务信息
+            </summary>
+            <param name="thirdPartyServiceCode">第三方服务代码</param>
+            <returns>第三方服务信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.GetThirdPartyServiceByBindToken(System.String)">
+            <summary>
+            由第三方服务绑定令牌获取第三方服务信息
+            </summary>
+            <param name="bindToken">绑定令牌</param>
+            <returns>第三方服务信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.GetThirdPartyServiceListByThirdPartyServiceName(System.String)">
+            <summary>
+            由第三方服务名称获取第三方服务列表
+            </summary>
+            <param name="thirdPartyServiceName">第三方服务名称</param>
+            <returns>第三方服务列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.AddService(CloudManagement.Models.ThirdPartyService)">
+            <summary>
+            添加第三方服务
+            </summary>
+            <param name="thirdPartyService">第三方服务信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.Update(System.Int32,CloudManagement.Models.ThirdPartyService)">
+            <summary>
+            更新第三方服务信息
+            </summary>
+            <param name="id">第三方服务编号</param>
+            <param name="thirdPartyService">第三方服务信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.Delete(System.Int32)">
+            <summary>
+            删除第三方服务
+            </summary>
+            <param name="id">第三方服务编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.ThirdPartyServiceController.LoginByToken(System.String)">
+            <summary>
+            第三方服务令牌登录
+            </summary>
+            <param name="bindToken">绑定令牌</param>
+            <returns>用户编号</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.UserGroupController">
+            <summary>
+            用户组控制器
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.GetUserGroupList">
+            <summary>
+            获取用户组列表
+            </summary>
+            <returns>用户组列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.GetUserGroupByUserGroupId(System.Int32)">
+            <summary>
+            由用户组编号获取用户组信息
+            </summary>
+            <param name="id">用户组编号</param>
+            <returns>用户组信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.GetUserGroupListByCreateByUser(System.Int32)">
+            <summary>
+            由创建用户获取用户组列表
+            </summary>
+            <param name="id">创建用户编号</param>
+            <returns>用户组列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.GetUserGroupListByRole(System.Int32)">
+            <summary>
+            由角色获取用户组列表
+            </summary>
+            <param name="id">角色编号</param>
+            <returns>用户组列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.GetGroupListByUserGroupName(System.String)">
+            <summary>
+            由用户组名称获取用户组列表
+            </summary>
+            <param name="userGroupName">用户组名称</param>
+            <returns>用户组列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.AddUserGroup(System.Int32,CloudManagement.Models.UserGroup)">
+            <summary>
+            添加用户组
+            </summary>
+            <param name="id">创建人用户编号</param>
+            <param name="userGroup">用户组信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.Update(System.Int32,CloudManagement.Models.UserGroup)">
+            <summary>
+            更新用户组信息
+            </summary>
+            <param name="id">用户组编号</param>
+            <param name="userGroup">用户组信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserGroupController.Delete(System.Int32)">
+            <summary>
+            删除用户组
+            </summary>
+            <param name="id">用户组编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
         <member name="T:CloudManagement.Controllers.TenantController">
             <summary>
             租户控制器
@@ -489,6 +954,61 @@
         <member name="M:CloudManagement.Controllers.TenantController.#ctor">
             <summary>
             构造函数
+            </summary>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.GetTenantList">
+            <summary>
+            获取租户列表
+            </summary>
+            <returns>租户列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.GetTenantByTenantId(System.Int32)">
+            <summary>
+            由租户编号获取租户信息
+            </summary>
+            <param name="id">租户编号</param>
+            <returns>租户信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.GetTenantListByCreateByUser(System.Int32)">
+            <summary>
+            由创建用户获取租户列表
+            </summary>
+            <param name="id">创建用户编号</param>
+            <returns>租户列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.GetTenantListByTenantPrincipalName(System.String)">
+            <summary>
+            由租户名称获取租户列表
+            </summary>
+            <param name="tenantPrincipalName">租户名称</param>
+            <returns>租户列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.AddTenant(System.Int32,CloudManagement.Models.TenantDetail)">
+            <summary>
+            添加租户
+            </summary>
+            <param name="id">创建人用户编号</param>
+            <param name="tenantDetail">租户详细信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.Update(System.Int32,CloudManagement.Models.Tenant)">
+            <summary>
+            更新租户信息
+            </summary>
+            <param name="id">租户编号</param>
+            <param name="tenant">租户信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.TenantController.Delete(System.Int32)">
+            <summary>
+            删除租户
+            </summary>
+            <param name="id">租户编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="T:CloudManagement.Controllers.TestController">
+            <summary>
+            测试控制器
             </summary>
         </member>
         <member name="T:CloudManagement.Controllers.UserController">
@@ -501,13 +1021,150 @@
             构造函数
             </summary>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.GetUserListByTenant(CloudManagement.Models.Tenant)">
+        <member name="M:CloudManagement.Controllers.UserController.GetUserList">
+            <summary>
+            获取用户列表
+            </summary>
+            <returns>用户列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.GetUserByUserId(System.Int32)">
+            <summary>
+            由用户编号获取用户信息
+            </summary>
+            <param name="id">用户编号</param>
+            <returns>用户信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.GetUserByUserPrincipalName(System.String)">
+            <summary>
+            由用户名获取用户信息
+            </summary>
+            <param name="userPrincipalName">用户名（英文名@域名）</param>
+            <returns>用户信息</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.GetUserListByTenant(System.Int32)">
             <summary>
             由租户获取用户列表
             </summary>
-            <returns>当前租户用户列表</returns>
+            <param name="id">租户编号</param>
+            <returns>租户用户列表</returns>
         </member>
-        <member name="M:CloudManagement.Helpers.HttpExtensionMethods.ExecuteGetServiceCall(System.String,System.String,System.String)">
+        <member name="M:CloudManagement.Controllers.UserController.AddUser(System.Int32,CloudManagement.Models.UserDetail)">
+            <summary>
+            由租户添加用户
+            </summary>
+            <param name="id">租户编号</param>
+            <param name="userDetail">用户详细信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.MoveInUserByTenant(System.Int32,System.Int32)">
+            <summary>
+            由租户移入用户
+            </summary>
+            <param name="id">租户编号</param>
+            <param name="userId">用户编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.MoveOutUserByTenant(System.Int32,System.Int32)">
+            <summary>
+            由租户移出用户
+            </summary>
+            <param name="id">租户编号</param>
+            <param name="userId">用户编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.ImportUserByTenant(System.Int32,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            由租户导入用户
+            </summary>
+            <param name="id">租户编号</param>
+            <param name="userIdList">用户编号列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.ExportUserByTenant(System.Int32,System.Linq.IQueryable{System.Int32})">
+            <summary>
+            由租户导出用户
+            </summary>
+            <param name="id">租户编号</param>
+            <param name="userIdList">用户编号列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.GetUserListByUserGroup(CloudManagement.Models.UserGroup)">
+            <summary>
+            由分组获取用户列表
+            </summary>
+            <param name="userGroup">用户分组</param>
+            <returns>分组用户列表</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.MoveInUserByUserGroup(System.Int32,System.Int32)">
+            <summary>
+            由分组移入用户
+            </summary>
+            <param name="id">用户组编号</param>
+            <param name="userId">用户编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.MoveOutUserByUserGroup(System.Int32,System.Int32)">
+            <summary>
+            由分组移出用户
+            </summary>
+            <param name="id">用户组编号</param>
+            <param name="userId">用户编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.ImportUserByUserGroup(System.Int32,System.Linq.IQueryable{System.Int32})">
+            <summary>
+            由分组导入用户
+            </summary>
+            <param name="id">用户分组编号</param>
+            <param name="userIdList">用户编号列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.ExportUserByUserGroup(System.Int32,System.Linq.IQueryable{System.Int32})">
+            <summary>
+            由分组导出用户
+            </summary>
+            <param name="id">用户分组编号</param>
+            <param name="userIdList">用户编号列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.AddUser(CloudManagement.Models.UserDetail)">
+            <summary>
+            添加用户
+            </summary>
+            <param name="userDetail">用户详细信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.Update(System.Int32,CloudManagement.Models.User)">
+            <summary>
+            更新用户信息
+            </summary>
+            <param name="id">用户编号</param>
+            <param name="user">用户信息</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.Delete(System.Int32)">
+            <summary>
+            删除用户
+            </summary>
+            <param name="id">用户编号</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.Login(System.String,System.String)">
+            <summary>
+            用户名密码登陆登录
+            </summary>
+            <param name="username">用户名</param>
+            <param name="password">密码</param>
+            <returns>用户编号</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.LoginByToken(System.String)">
+            <summary>
+            令牌登录
+            </summary>
+            <param name="token">令牌</param>
+            <returns>用户编号</returns>
+        </member>
+        <member name="M:CloudManagement.Helper.HttpExtensionMethods.ExecuteGetServiceCall(System.String,System.String,System.String)">
             <summary>
             Executes the HTTP GET service call.
             </summary>
@@ -524,7 +1181,7 @@
             </exception>
             <exception cref="T:System.ArgumentNullException">tokenManager</exception>
         </member>
-        <member name="M:CloudManagement.Helpers.HttpExtensionMethods.ExecutePostServiceCall``1(System.String,System.String,System.String,``0)">
+        <member name="M:CloudManagement.Helper.HttpExtensionMethods.ExecutePostServiceCall``1(System.String,System.String,System.String,``0)">
             <summary>
             Executes the HTTP POST service call.
             </summary>
@@ -536,7 +1193,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentNullException">postContent</exception>
         </member>
-        <member name="M:CloudManagement.Helpers.HttpExtensionMethods.ExecuteDeleteServiceCall(System.String,System.String,System.String)">
+        <member name="M:CloudManagement.Helper.HttpExtensionMethods.ExecuteDeleteServiceCall(System.String,System.String,System.String)">
             <summary>
             Executes the HTTP DELETE service call.
             </summary>
@@ -620,6 +1277,11 @@
             服务编号
             </summary>
         </member>
+        <member name="P:CloudManagement.Models.Permission.RolePermissionMapping">
+            <summary>
+            用户组角色映射信息
+            </summary>
+        </member>
         <member name="T:CloudManagement.Models.Role">
             <summary>
             角色信息表
@@ -648,6 +1310,16 @@
         <member name="P:CloudManagement.Models.Role.CreateByUserId">
             <summary>
             创建用户编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.UserGroupRoleMapping">
+            <summary>
+            用户组角色映射信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Role.CreateByUser">
+            <summary>
+            角色创建人
             </summary>
         </member>
         <member name="T:CloudManagement.Models.RolePermissionMapping">
@@ -718,6 +1390,21 @@
         <member name="P:CloudManagement.Models.Tenant.CreateByUserId">
             <summary>
             创建人
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.User">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.TenantDetail">
+            <summary>
+            租户详细信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.Tenant.CreateByUser">
+            <summary>
+            租户创建人
             </summary>
         </member>
         <member name="T:CloudManagement.Models.TenantDetail">
@@ -830,6 +1517,11 @@
             绑定令牌
             </summary>
         </member>
+        <member name="P:CloudManagement.Models.ThirdPartyService.UserThirdPartyServiceMapping">
+            <summary>
+            用户第三方服务映射
+            </summary>
+        </member>
         <member name="T:CloudManagement.Models.User">
             <summary>
             用户信息表
@@ -870,6 +1562,21 @@
             用户所在企业编号
             </summary>
         </member>
+        <member name="P:CloudManagement.Models.User.UserDetail">
+            <summary>
+            用户详细信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.UserGroup">
+            <summary>
+            用户组信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.User.Tenant">
+            <summary>
+            租户信息
+            </summary>
+        </member>
         <member name="T:CloudManagement.Models.UserDetail">
             <summary>
             用户详细信息表
@@ -882,7 +1589,7 @@
         </member>
         <member name="P:CloudManagement.Models.UserDetail.UserPrincipalName">
             <summary>
-            用户名
+            用户名（英文名@域名）
             </summary>
         </member>
         <member name="P:CloudManagement.Models.UserDetail.AccountEnabled">
@@ -988,6 +1695,21 @@
         <member name="P:CloudManagement.Models.UserGroup.CreateByUserId">
             <summary>
             创建用户编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.User">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.UserGroupRoleMapping">
+            <summary>
+            用户组角色映射信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroup.CreateByUser">
+            <summary>
+            用户组创建人
             </summary>
         </member>
         <member name="T:CloudManagement.Models.UserGroupRoleMapping">

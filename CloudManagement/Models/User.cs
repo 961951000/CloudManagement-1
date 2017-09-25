@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace CloudManagement.Models
 {
@@ -82,12 +83,21 @@ namespace CloudManagement.Models
 			get;
 		}
 
+        /// <summary>
+        /// 用户详细信息
+        /// </summary>
 	    [ForeignKey("UserDetailId")]
 	    public UserDetail UserDetail { get; set; }
 
+        /// <summary>
+        /// 用户组信息
+        /// </summary>
 	    [ForeignKey("UserGroupId")]
-	    public IEnumerable<UserGroup> UserGroup { get; set; }
+	    public IList<UserGroup> UserGroup { get; set; }
 
+        /// <summary>
+        /// 租户信息
+        /// </summary>
 	    [ForeignKey("TenantId")]
 	    public Tenant Tenant { get; set; }
 

@@ -61,7 +61,23 @@ namespace CloudManagement.Models
 			get;
 		}
 
-		public override string ToString()
+	    /// <summary>
+	    /// 用户组角色映射信息
+	    /// </summary>
+	    [ForeignKey("UserGroupRoleMapping.RoleId")]
+	    public UserGroupRoleMapping UserGroupRoleMapping
+	    {
+	        set;
+	        get;
+	    }
+
+	    /// <summary>
+	    /// 角色创建人
+	    /// </summary>
+	    [ForeignKey("CreateByUserId")]
+	    public User CreateByUser { get; set; }
+
+        public override string ToString()
 		{
 			return "RoleId=" + RoleId + ",RoleName=" + RoleName + ",CreateTime=" + CreateTime + ",UpdateTime=" + UpdateTime + ",CreateByUserId=" + CreateByUserId;
 		}

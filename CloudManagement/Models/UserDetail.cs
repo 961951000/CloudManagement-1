@@ -21,10 +21,10 @@ namespace CloudManagement.Models
 			get;
 		}
 
-		/// <summary>
-		/// 用户名
-		/// </summary>
-		[Column("UserPrincipalName")]
+        /// <summary>
+        /// 用户名（英文名@域名）
+        /// </summary>
+        [Column("UserPrincipalName")]
 		public string UserPrincipalName
 		{
 			set;

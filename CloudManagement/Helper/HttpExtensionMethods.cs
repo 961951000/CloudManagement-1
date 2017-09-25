@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace CloudManagement.Helpers
+namespace CloudManagement.Helper
 {
     public static class HttpExtensionMethods
     {
         public static readonly string AuthenticationScheme = "Authorization";
+        public static readonly string AuthenticationType = "Basic ";
         /// <summary>
         /// Executes the HTTP GET service call.
         /// </summary>

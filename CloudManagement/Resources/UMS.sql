@@ -11,7 +11,7 @@ Target Server Type    : SQL Server
 Target Server Version : 110000
 File Encoding         : 65001
 
-Date: 2017-09-21 20:23:02
+Date: 2017-09-24 21:05:02
 */
 
 
@@ -1127,12 +1127,12 @@ IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description',
 'SCHEMA', N'dbo', 
 'TABLE', N'UserDetail', 
 'COLUMN', N'UserPrincipalName')) > 0) 
-EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'用户名'
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'用户名（英文名@域名）'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'UserDetail'
 , @level2type = 'COLUMN', @level2name = N'UserPrincipalName'
 ELSE
-EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'用户名'
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'用户名（英文名@域名）'
 , @level0type = 'SCHEMA', @level0name = N'dbo'
 , @level1type = 'TABLE', @level1name = N'UserDetail'
 , @level2type = 'COLUMN', @level2name = N'UserPrincipalName'

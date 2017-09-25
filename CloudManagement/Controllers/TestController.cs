@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace CloudManagement.Controllers
 {
     //[AllowAnonymous]
+    /// <summary>
+    /// 测试控制器
+    /// </summary>
     public class TestController : ApiController
     {
         public string Get()
