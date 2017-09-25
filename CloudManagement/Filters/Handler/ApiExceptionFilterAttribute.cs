@@ -12,8 +12,15 @@ namespace CloudManagement.Filters.Handler
     {
         public override async Task OnExceptionAsync(HttpActionExecutedContext context, CancellationToken cancellationToken)
         {
-            context.Response = context.Request.CreateResponse(HttpStatusCode.InternalServerError, context.Exception.Message);
-            Logger.Error($"{context.Exception} {Environment.NewLine}Message: {context.Exception.Message}");
+            if (context.Exception is ArgumentException)
+            {
+                context.Response = context.Request.CreateResponse(HttpStatusCode.BadRequest, context.Exception.Message);
+            }
+            else
+            {
+                context.Response = context.Request.CreateResponse(HttpStatusCode.InternalServerError, context.Exception.Message);
+            }
+            Logger.Error(context.Exception);
             await base.OnExceptionAsync(context, cancellationToken);
         }
     }

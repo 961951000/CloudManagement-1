@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CloudManagement.Helper;
+using System.Web.Http.Results;
+using Newtonsoft.Json;
 
 namespace CloudManagement.Controllers
 {
@@ -36,13 +38,13 @@ namespace CloudManagement.Controllers
         /// <returns>用户列表</returns>
         public async Task<HttpResponseMessage> GetUserList()
         {
-            var result = _db.User;
+            var result = await _db.User.ToListAsync();
             foreach (var user in result)
             {
                 user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace CloudManagement.Controllers
                 Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{userDetail.UserPrincipalName}:{userDetail.Password}")),
                 CreateTime = DateTime.Now,
                 UserDetail = userDetail,
-                Tenant = await _db.Tenant.SingleAsync(x => x.TenantId == id)
+                //Tenant = await _db.Tenant.SingleAsync(x => x.TenantId == id)
             });
             var result = await _db.SaveChangesAsync();
 
@@ -177,21 +179,21 @@ namespace CloudManagement.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }
 
-        /// <summary>
-        /// 由分组获取用户列表
-        /// </summary>
-        /// <param name="userGroup">用户分组</param>
-        /// <returns>分组用户列表</returns>
-        public async Task<HttpResponseMessage> GetUserListByUserGroup(UserGroup userGroup)
-        {
-            var result = _db.User.Where(x => x.UserGroupId == userGroup.UserGroupId);
-            foreach (var user in result)
-            {
-                user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
-            }
+        ///// <summary>
+        ///// 由分组获取用户列表
+        ///// </summary>
+        ///// <param name="userGroup">用户分组</param>
+        ///// <returns>分组用户列表</returns>
+        //public async Task<HttpResponseMessage> GetUserListByUserGroup(UserGroup userGroup)
+        //{
+        //    var result = _db.User.Where(x => x.UserGroupId == userGroup.UserGroupId);
+        //    foreach (var user in result)
+        //    {
+        //        user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
+        //    }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
-        }
+        //    return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+        //}
 
         /// <summary>
         /// 由分组移入用户
@@ -280,7 +282,7 @@ namespace CloudManagement.Controllers
             _db.User.Add(user);
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         /// <summary>
@@ -297,7 +299,7 @@ namespace CloudManagement.Controllers
             _db.Entry(user).State = EntityState.Modified;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         /// <summary>
@@ -305,13 +307,24 @@ namespace CloudManagement.Controllers
         /// </summary>
         /// <param name="id">用户编号</param>
         /// <returns>写入基础数据库的状态项数</returns>
+        [HttpDelete]
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            var user = await _db.User.SingleAsync(x => x.UserId == id);
-            _db.User.Remove(user);
-            var result = await _db.SaveChangesAsync();
+            int result;
+            try
+            {
+                var user = await _db.User.SingleAsync(x => x.UserId == id);
+                user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
+                _db.UserDetail.Remove(user.UserDetail);
+                _db.User.Remove(user);
+                result = await _db.SaveChangesAsync();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         /// <summary>
@@ -320,15 +333,27 @@ namespace CloudManagement.Controllers
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns>用户编号</returns>
+        [HttpGet, HttpPost]
         public async Task<HttpResponseMessage> Login(string username, string password)
         {
-            var result = await _db.User.Join(
-                _db.UserDetail.Where(x => x.UserPrincipalName == username && x.Password == password),
-                x => x.UserDetailId,
-                y => y.UserDetailId,
-                (x, y) => x).SingleAsync();
-            var response = Request.CreateResponse(HttpStatusCode.OK, Json(result.UserId));
-            response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + result.Token);
+            int result;
+            string token;
+            try
+            {
+                var user = await _db.User.Join(
+                 _db.UserDetail.Where(x => x.UserPrincipalName == username && x.Password == password),
+                 x => x.UserDetailId,
+                 y => y.UserDetailId,
+                 (x, y) => x).SingleAsync();
+                result = (int)user.UserId;
+                token = user.Token;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            var response = Request.CreateResponse(HttpStatusCode.OK, result);
+            response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
 
             return response;
         }
@@ -340,13 +365,22 @@ namespace CloudManagement.Controllers
         /// <returns>用户编号</returns>
         public async Task<HttpResponseMessage> LoginByToken(string token)
         {
-            if (token.StartsWith(HttpExtensionMethods.AuthenticationType))
+            int result;
+            try
             {
-                token = token.Substring(HttpExtensionMethods.AuthenticationType.Length);
+                if (token.StartsWith(HttpExtensionMethods.AuthenticationType))
+                {
+                    token = token.Substring(HttpExtensionMethods.AuthenticationType.Length);
+                }
+                var user = await _db.User.SingleAsync(x => x.Token == token);
+                result = (int)user.UserId;
             }
-            var result = await _db.User.SingleAsync(x => x.Token == token);
-            var response = Request.CreateResponse(HttpStatusCode.OK, Json(result.UserId));
-            response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + result.Token);
+            catch (InvalidOperationException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            var response = Request.CreateResponse(HttpStatusCode.OK, result);
+            response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
 
             return response;
         }

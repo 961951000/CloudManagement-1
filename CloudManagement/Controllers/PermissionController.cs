@@ -138,7 +138,7 @@ namespace CloudManagement.Controllers
         /// <param name="id">角色编号</param>
         /// <param name="permissionIdList">权限编号列表</param>
         /// <returns>写入基础数据库的状态项数</returns>
-        public async Task<HttpResponseMessage> ImportPermissionByRole(int id, IList<int> permissionIdList)
+        public async Task<HttpResponseMessage> ImportPermissionByRole(int id, IEnumerable<int> permissionIdList)
         {
             var rolePermissionListMappingList = permissionIdList.Select(permissionId => new RolePermissionMapping
             {
@@ -184,7 +184,7 @@ namespace CloudManagement.Controllers
         /// </summary>
         /// <param name="permissionList">权限列表</param>
         /// <returns>写入基础数据库的状态项数</returns>
-        public async Task<HttpResponseMessage> AddPermissionList(IList<Permission> permissionList)
+        public async Task<HttpResponseMessage> AddPermissionList(IEnumerable<Permission> permissionList)
         {
             _db.Permission.AddRange(permissionList);
             var result = await _db.SaveChangesAsync();
@@ -213,7 +213,7 @@ namespace CloudManagement.Controllers
         /// <param name="id">服务编号</param>
         /// <param name="permissionList">权限列表</param>
         /// <returns>写入基础数据库的状态项数</returns>
-        public async Task<HttpResponseMessage> AddPermissionListByService(int id, IList<Permission> permissionList)
+        public async Task<HttpResponseMessage> AddPermissionListByService(int id, IEnumerable<Permission> permissionList)
         {
             permissionList = permissionList.Select(x => new Permission
             {

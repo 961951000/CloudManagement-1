@@ -65,7 +65,7 @@ namespace CloudManagement.Models
         /// <summary>
         /// 用户信息
         /// </summary>
-        public IList<User> User { get; set; }
+        public IEnumerable<User> User { get; set; }
 
         /// <summary>
         /// 用户组创建人

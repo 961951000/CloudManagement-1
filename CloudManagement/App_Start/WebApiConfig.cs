@@ -2,6 +2,7 @@
 using CloudManagement.Filters.Action;
 using CloudManagement.Filters.Authentication;
 using CloudManagement.Filters.Handler;
+using System.Net.Http.Headers;
 
 namespace CloudManagement
 {
@@ -21,6 +22,9 @@ namespace CloudManagement
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+#if !DEBUG
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+#endif
 
             //config.Filters.Add(new IdentityBasicAuthenticationAttribute());
             config.Filters.Add(new ApiExceptionFilterAttribute());
