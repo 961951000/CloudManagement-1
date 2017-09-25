@@ -486,12 +486,18 @@
             文件控制器
             </summary>
         </member>
-        <member name="M:CloudManagement.Controllers.FileController.GetFile(System.String)">
+        <member name="M:CloudManagement.Controllers.FileController.FileDownload(System.String)">
             <summary>
-            根据文件名获得文件
+            文件下载
             </summary>
             <param name="fileName">文件名</param>
-            <returns>文件</returns>
+            <returns></returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.FileController.FileUpload">
+            <summary>
+            文件上传
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:CloudManagement.Controllers.OperationLogController">
             <summary>
@@ -1297,6 +1303,11 @@
             权限名称
             </summary>
         </member>
+        <member name="P:CloudManagement.Models.Permission.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
         <member name="P:CloudManagement.Models.Permission.PermissionCode">
             <summary>
             权限代码
@@ -1685,6 +1696,11 @@
         <member name="P:CloudManagement.Models.UserDetail.PostalCode">
             <summary>
             邮政编码
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserDetail.Photo">
+            <summary>
+            头像
             </summary>
         </member>
         <member name="T:CloudManagement.Models.UserGroup">

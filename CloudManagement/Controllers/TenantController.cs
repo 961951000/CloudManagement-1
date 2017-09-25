@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace CloudManagement.Controllers
 {
@@ -43,7 +44,7 @@ namespace CloudManagement.Controllers
                     tenant.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == tenant.TenantDetailId);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
@@ -63,7 +64,7 @@ namespace CloudManagement.Controllers
                 var result = await _db.Tenant.SingleAsync(x => x.TenantId == id);
                 result.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == result.TenantDetailId);
 
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
@@ -80,7 +81,7 @@ namespace CloudManagement.Controllers
         {
             var result = await _db.Tenant.Where(x => x.CreateByUserId == id).ToListAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace CloudManagement.Controllers
                 result.Add(tenant);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace CloudManagement.Controllers
             _db.Tenant.Add(tenant);
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace CloudManagement.Controllers
             _db.Entry(tenant).State = EntityState.Modified;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -167,10 +168,12 @@ namespace CloudManagement.Controllers
             try
             {
                 var tenant = await _db.Tenant.SingleAsync(x => x.TenantId == id);
+                tenant.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == tenant.TenantDetailId);
                 _db.Tenant.Remove(tenant);
+                _db.TenantDetail.Remove(tenant.TenantDetail);
                 var result = await _db.SaveChangesAsync();
 
-                return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {

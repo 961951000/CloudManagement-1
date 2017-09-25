@@ -1,4 +1,7 @@
-﻿using System.Web.Http;
+﻿using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace CloudManagement.Controllers
 {
@@ -8,9 +11,11 @@ namespace CloudManagement.Controllers
     /// </summary>
     public class TestController : ApiController
     {
-        public string Get()
+        public HttpResponseMessage Get()
         {
-            return "呵呵哒...";
+            var result = "呵呵哒...";
+
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(new { result }));
         }
     }
 }

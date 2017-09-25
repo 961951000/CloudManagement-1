@@ -39,7 +39,7 @@ namespace CloudManagement.Controllers
         {
             try
             {
-                var result = await _db.User.AnyAsync() ? await _db.User.ToListAsync() : new List<User>();
+                var result = _db.User;
                 foreach (var user in result)
                 {
                     user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
@@ -147,7 +147,7 @@ namespace CloudManagement.Controllers
             });
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace CloudManagement.Controllers
             user.UpdateTime = DateTime.Now;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace CloudManagement.Controllers
             user.UpdateTime = DateTime.Now;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace CloudManagement.Controllers
             });
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace CloudManagement.Controllers
             });
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace CloudManagement.Controllers
                 user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace CloudManagement.Controllers
             user.UpdateTime = DateTime.Now;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace CloudManagement.Controllers
             user.UpdateTime = DateTime.Now;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace CloudManagement.Controllers
             });
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace CloudManagement.Controllers
             });
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, Json(result));
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace CloudManagement.Controllers
             _db.User.Add(user);
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace CloudManagement.Controllers
             _db.User.AddRange(userList);
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -404,7 +404,7 @@ namespace CloudManagement.Controllers
             _db.Entry(user).State = EntityState.Modified;
             var result = await _db.SaveChangesAsync();
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
         }
 
         /// <summary>
@@ -418,11 +418,11 @@ namespace CloudManagement.Controllers
             {
                 var user = await _db.User.SingleAsync(x => x.UserId == id);
                 user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
-                _db.UserDetail.Remove(user.UserDetail);
                 _db.User.Remove(user);
+                _db.UserDetail.Remove(user.UserDetail);
                 var result = await _db.SaveChangesAsync();
 
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
@@ -447,7 +447,7 @@ namespace CloudManagement.Controllers
                  y => y.UserDetailId,
                  (x, y) => x).SingleAsync();
                 var result = user.UserId;
-                var response = Request.CreateResponse(HttpStatusCode.OK, result);
+                var response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
                 response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + user.Token);
 
                 return response;
@@ -474,7 +474,7 @@ namespace CloudManagement.Controllers
                 token = token.Substring(HttpExtensionMethods.AuthenticationType.Length);
                 var user = await _db.User.SingleAsync(x => x.Token == token);
                 var result = user.UserId;
-                var response = Request.CreateResponse(HttpStatusCode.OK, result);
+                var response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
                 response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
 
                 return response;
