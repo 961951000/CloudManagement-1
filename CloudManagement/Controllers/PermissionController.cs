@@ -81,7 +81,7 @@ namespace CloudManagement.Controllers
         /// <returns>权限列表</returns>
         public async Task<HttpResponseMessage> GetPermissionListByRole(int id)
         {
-            var result = await _db.Permission.Where(x => x.RolePermissionMapping.RoleId == id).ToListAsync();
+            var result = await _db.RolePermissionMapping.Where(x => x.RoleId == id).Select(x => x.Permission).ToListAsync();
 
             return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }

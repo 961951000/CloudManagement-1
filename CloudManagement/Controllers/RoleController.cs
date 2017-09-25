@@ -69,7 +69,7 @@ namespace CloudManagement.Controllers
         /// <returns>角色列表</returns>
         public async Task<HttpResponseMessage> GetRoleListByUserGroup(int id)
         {
-            var result = await _db.Role.Where(x => x.UserGroupRoleMapping.UserGroupId == id).ToListAsync();
+            var result = await _db.UserGroupRoleMapping.Where(x => x.UserGroupId == id).Select(x => x.Role).ToListAsync();
 
             return Request.CreateResponse(HttpStatusCode.OK, Json(result));
         }

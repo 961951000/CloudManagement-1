@@ -62,16 +62,6 @@ namespace CloudManagement.Models
 		}
 
 	    /// <summary>
-	    /// 用户组角色映射信息
-	    /// </summary>
-	    [ForeignKey("UserGroupRoleMapping.RoleId")]
-	    public UserGroupRoleMapping UserGroupRoleMapping
-	    {
-	        set;
-	        get;
-	    }
-
-	    /// <summary>
 	    /// 角色创建人
 	    /// </summary>
 	    [ForeignKey("CreateByUserId")]

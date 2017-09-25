@@ -51,16 +51,6 @@ namespace CloudManagement.Models
             get;
         }
 
-        /// <summary>
-        /// 用户第三方服务映射
-        /// </summary>
-        [ForeignKey("UserThirdPartyServiceMapping.ThirdPartyServiceId")]
-        public UserThirdPartyServiceMapping UserThirdPartyServiceMapping
-        {
-            set;
-            get;
-        }
-
         public override string ToString()
         {
             return "ThirdPartyServiceId=" + ThirdPartyServiceId + ",ThirdPartyServiceName=" + ThirdPartyServiceName + ",ThirdPartyServiceCode=" + ThirdPartyServiceCode + ",BindToken=" + BindToken;

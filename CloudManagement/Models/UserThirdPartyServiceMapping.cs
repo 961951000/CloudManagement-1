@@ -41,7 +41,27 @@ namespace CloudManagement.Models
 			get;
 		}
 
-		public override string ToString()
+        /// <summary>
+        /// 用户信息
+        /// </summary>
+        [ForeignKey("UserId")]
+        public User User
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        /// 角色信息
+        /// </summary>
+        [ForeignKey("ThirdPartyServiceId")]
+        public ThirdPartyService ThirdPartyService
+        {
+            set;
+            get;
+        }
+
+        public override string ToString()
 		{
 			return "UserThirdPartyServiceMappingId=" + UserThirdPartyServiceMappingId + ",UserId=" + UserId + ",ThirdPartyServiceId=" + ThirdPartyServiceId;
 		}

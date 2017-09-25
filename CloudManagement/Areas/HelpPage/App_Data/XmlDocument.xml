@@ -1277,11 +1277,6 @@
             服务编号
             </summary>
         </member>
-        <member name="P:CloudManagement.Models.Permission.RolePermissionMapping">
-            <summary>
-            用户组角色映射信息
-            </summary>
-        </member>
         <member name="T:CloudManagement.Models.Role">
             <summary>
             角色信息表
@@ -1312,11 +1307,6 @@
             创建用户编号
             </summary>
         </member>
-        <member name="P:CloudManagement.Models.Role.UserGroupRoleMapping">
-            <summary>
-            用户组角色映射信息
-            </summary>
-        </member>
         <member name="P:CloudManagement.Models.Role.CreateByUser">
             <summary>
             角色创建人
@@ -1340,6 +1330,16 @@
         <member name="P:CloudManagement.Models.RolePermissionMapping.PermissionId">
             <summary>
             权限编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.RolePermissionMapping.Role">
+            <summary>
+            角色信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.RolePermissionMapping.Permission">
+            <summary>
+            权限信息
             </summary>
         </member>
         <member name="T:CloudManagement.Models.Service">
@@ -1515,11 +1515,6 @@
         <member name="P:CloudManagement.Models.ThirdPartyService.BindToken">
             <summary>
             绑定令牌
-            </summary>
-        </member>
-        <member name="P:CloudManagement.Models.ThirdPartyService.UserThirdPartyServiceMapping">
-            <summary>
-            用户第三方服务映射
             </summary>
         </member>
         <member name="T:CloudManagement.Models.User">
@@ -1702,11 +1697,6 @@
             用户信息
             </summary>
         </member>
-        <member name="P:CloudManagement.Models.UserGroup.UserGroupRoleMapping">
-            <summary>
-            用户组角色映射信息
-            </summary>
-        </member>
         <member name="P:CloudManagement.Models.UserGroup.CreateByUser">
             <summary>
             用户组创建人
@@ -1732,6 +1722,16 @@
             角色编号
             </summary>
         </member>
+        <member name="P:CloudManagement.Models.UserGroupRoleMapping.UserGroup">
+            <summary>
+            用户组信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserGroupRoleMapping.Role">
+            <summary>
+            角色信息
+            </summary>
+        </member>
         <member name="T:CloudManagement.Models.UserThirdPartyServiceMapping">
             <summary>
             用户第三方服务映射表
@@ -1750,6 +1750,16 @@
         <member name="P:CloudManagement.Models.UserThirdPartyServiceMapping.ThirdPartyServiceId">
             <summary>
             第三方服务编号
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserThirdPartyServiceMapping.User">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+        <member name="P:CloudManagement.Models.UserThirdPartyServiceMapping.ThirdPartyService">
+            <summary>
+            角色信息
             </summary>
         </member>
     </members>

@@ -68,16 +68,6 @@ namespace CloudManagement.Models
         public IList<User> User { get; set; }
 
         /// <summary>
-        /// 用户组角色映射信息
-        /// </summary>
-        [ForeignKey("UserGroupRoleMapping.UserGroupId")]
-        public UserGroupRoleMapping UserGroupRoleMapping
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
         /// 用户组创建人
         /// </summary>
         [ForeignKey("CreateByUserId")]

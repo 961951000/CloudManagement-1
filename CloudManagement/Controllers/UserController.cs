@@ -16,7 +16,7 @@ namespace CloudManagement.Controllers
     /// <summary>
     /// 用户控制器
     /// </summary>
-    //[AllowAnonymous]
+    [AllowAnonymous]
     public class UserController : ApiController
     {
         private readonly SqlServerContext _db;

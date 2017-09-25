@@ -51,16 +51,6 @@ namespace CloudManagement.Models
             get;
         }
 
-        /// <summary>
-        /// 用户组角色映射信息
-        /// </summary>
-        [ForeignKey("RolePermissionMapping.PermissionId")]
-        public RolePermissionMapping RolePermissionMapping
-        {
-            set;
-            get;
-        }
-
         public override string ToString()
         {
             return "PermissionId=" + PermissionId + ",PermissionName=" + PermissionName + ",PermissionCode=" + PermissionCode + ",ServiceId=" + ServiceId;
