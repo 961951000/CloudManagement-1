@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 
 namespace CloudManagement.Helper
 {
@@ -11,7 +12,7 @@ namespace CloudManagement.Helper
         /// <summary>
         /// 网站根目录
         /// </summary>
-        public static string RootPath => HttpRuntime.AppDomainAppPath;
+        public static string RootPath => HostingEnvironment.MapPath("~/App_Data");
 
         /// <summary>
         /// 创建目录如果不存在

@@ -1085,11 +1085,17 @@
             <param name="userDetail">用户详细信息</param>
             <returns>写入基础数据库的状态项数</returns>
         </member>
-        <member name="M:CloudManagement.Controllers.UserController.AddUserList(System.Collections.Generic.IEnumerable{CloudManagement.Models.UserDetail})">
+        <member name="M:CloudManagement.Controllers.UserController.ImportUser(System.Collections.Generic.IEnumerable{CloudManagement.Models.UserDetail})">
             <summary>
-            添加用户列表
+            导入用户列表
             </summary>
             <param name="userDetailList">用户详细信息列表</param>
+            <returns>写入基础数据库的状态项数</returns>
+        </member>
+        <member name="M:CloudManagement.Controllers.UserController.ImportUserByExcel">
+            <summary>
+            由Excel表格导入用户列表
+            </summary>
             <returns>写入基础数据库的状态项数</returns>
         </member>
         <member name="M:CloudManagement.Controllers.UserController.Update(System.Int32,CloudManagement.Models.User)">

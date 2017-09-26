@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using CloudManagement.Helper;
 using Newtonsoft.Json;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace CloudManagement.Controllers
 {
@@ -37,6 +39,7 @@ namespace CloudManagement.Controllers
         /// <returns>用户列表</returns>
         public async Task<HttpResponseMessage> GetUserList()
         {
+            HttpResponseMessage response;
             try
             {
                 var result = _db.User;
@@ -45,12 +48,14 @@ namespace CloudManagement.Controllers
                     user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -60,17 +65,20 @@ namespace CloudManagement.Controllers
         /// <returns>用户信息</returns>
         public async Task<HttpResponseMessage> GetUserByUserId(int id)
         {
+            HttpResponseMessage response;
             try
             {
                 var result = await _db.User.SingleAsync(x => x.UserGroupId == id);
                 result.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == result.UserDetailId);
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -80,18 +88,21 @@ namespace CloudManagement.Controllers
         /// <returns>用户信息</returns>
         public async Task<HttpResponseMessage> GetUserByUserPrincipalName(string userPrincipalName)
         {
+            HttpResponseMessage response;
             try
             {
                 var userDetail = await _db.UserDetail.SingleAsync(x => x.UserPrincipalName == userPrincipalName);
                 var result = await _db.User.SingleAsync(x => x.UserDetailId == userDetail.UserDetailId);
                 result.UserDetail = userDetail;
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -101,6 +112,7 @@ namespace CloudManagement.Controllers
         /// <returns>租户用户列表</returns>
         public async Task<HttpResponseMessage> GetUserListByTenant(int id)
         {
+            HttpResponseMessage response;
             try
             {
                 var result = _db.User.Where(x => x.TenantId == id);
@@ -109,12 +121,14 @@ namespace CloudManagement.Controllers
                     user.UserDetail = await _db.UserDetail.SingleAsync(x => x.UserDetailId == user.UserDetailId);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -128,15 +142,15 @@ namespace CloudManagement.Controllers
         {
             if (await _db.Tenant.AnyAsync(x => x.TenantId == id))
             {
-                throw new ArgumentException($"Tenant {id} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"Tenant {id} does not exist.");
             }
             if (userDetail == null)
             {
-                throw new ArgumentException("Parameter userDetail can not empty.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Parameter userDetail can not empty.");
             }
             if (await _db.UserDetail.AnyAsync(x => x.UserPrincipalName == userDetail.UserPrincipalName))
             {
-                throw new ArgumentException("Duplicate user principal name.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Duplicate user principal name.");
             }
             _db.User.Add(new User
             {
@@ -161,15 +175,15 @@ namespace CloudManagement.Controllers
         {
             if (await _db.Tenant.AnyAsync(x => x.TenantId == id))
             {
-                throw new ArgumentException($"Tenant {id} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"Tenant {id} does not exist.");
             }
             if (await _db.User.AnyAsync(x => x.UserId == userId))
             {
-                throw new ArgumentException($"User {userId} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"User {userId} does not exist.");
             }
             if (await _db.User.AnyAsync(x => x.UserId == userId && x.TenantId != null))
             {
-                throw new ArgumentException($"User {userId} has joined the tenant");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"User {userId} has joined the tenant");
             }
             var user = await _db.User.SingleAsync(x => x.UserId == userId);
             user.TenantId = id;
@@ -205,11 +219,11 @@ namespace CloudManagement.Controllers
         {
             if (await _db.Tenant.AnyAsync(x => x.TenantId == id))
             {
-                throw new ArgumentException($"Tenant {id} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"Tenant {id} does not exist.");
             }
             if (userIdList == null || !userIdList.Any())
             {
-                throw new ArgumentException("Parameter userIdList can not empty.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Parameter userIdList can not empty.");
             }
             var userList = await _db.User.Where(x => userIdList.Contains((int)x.UserId)).ToListAsync();
             userList.ForEach(x =>
@@ -337,11 +351,11 @@ namespace CloudManagement.Controllers
         {
             if (userDetail == null)
             {
-                throw new ArgumentException("Parameter userDetail userDetailsList can not empty.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Parameter userDetail userDetailsList can not empty.");
             }
             if (await _db.UserDetail.AnyAsync(x => x.UserPrincipalName == userDetail.UserPrincipalName))
             {
-                throw new ArgumentException("Duplicate user principal name.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Duplicate user principal name.");
             }
             //Basic Y2FpeGlhbmd3ZWlAYmV5b25kc29mdC5jb206Y2FpeGlhbmd3ZWkyMDE3MTAwMQ==
             var user = new User
@@ -357,17 +371,17 @@ namespace CloudManagement.Controllers
         }
 
         /// <summary>
-        /// 添加用户列表
+        /// 导入用户列表
         /// </summary>
         /// <param name="userDetailList">用户详细信息列表</param>
         /// <returns>写入基础数据库的状态项数</returns>
         [HttpPut]
-        public async Task<HttpResponseMessage> AddUserList(IEnumerable<UserDetail> userDetailList)
+        public async Task<HttpResponseMessage> ImportUser(IEnumerable<UserDetail> userDetailList)
         {
             var userDetails = userDetailList as UserDetail[] ?? userDetailList.ToArray();
             if (userDetailList == null || !userDetails.Any())
             {
-                throw new ArgumentException("Parameter userDetailsList can not empty.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Parameter userDetailsList can not empty.");
             }
             var userList = userDetails.Select(userDetail => new User
             {
@@ -382,6 +396,56 @@ namespace CloudManagement.Controllers
         }
 
         /// <summary>
+        /// 由Excel表格导入用户列表
+        /// </summary>
+        /// <returns>写入基础数据库的状态项数</returns>
+        public async Task<HttpResponseMessage> ImportUserByExcel()
+        {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var rootPath = Path.Combine(IOHelper.RootPath, "Temp");
+            IOHelper.CreateDirectoryIfNotExist(rootPath);
+            var provider = new RenamingMultipartFormDataStreamProvider(rootPath);
+            // Read the form data.  
+            const int maxSize = 10000000;
+            const string fileTypes = "xls|xlsx";
+            var task = Request.Content.ReadAsMultipartAsync(provider).ContinueWith(o =>
+            {
+                HttpResponseMessage result;
+                var file = provider.FileData[0];
+                var fileinfo = new FileInfo(file.LocalFileName);
+                var filename = Path.GetFileName(file.LocalFileName);
+                var extension = Path.GetExtension(filename);
+                if (fileinfo.Length <= 0)
+                {
+                    result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "请选择上传文件。");
+                }
+                else if (fileinfo.Length > maxSize)
+                {
+                    result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "上传文件大小超过限制。");
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(extension) || fileTypes.Split('|').Any(x => !x.Equals(extension.Substring(1), StringComparison.CurrentCultureIgnoreCase)))
+                    {
+                        result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "不支持上传文件类型。");
+                    }
+                    else
+                    {
+                        result = Request.CreateResponse(HttpStatusCode.OK, filename);
+                    }
+                }
+
+                return result;
+            });
+
+            return await task;
+        }
+
+        /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="id">用户编号</param>
@@ -392,11 +456,11 @@ namespace CloudManagement.Controllers
         {
             if (await _db.User.AnyAsync(x => x.UserId == id))
             {
-                throw new ArgumentException($"User {id} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"User {id} does not exist.");
             }
             if (user?.UserDetail == null)
             {
-                throw new ArgumentException("Lack of user information.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Lack of user information.");
             }
             user.UserId = id;
             user.Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserDetail.UserPrincipalName}:{user.UserDetail.Password}"));
@@ -414,6 +478,7 @@ namespace CloudManagement.Controllers
         /// <returns>写入基础数据库的状态项数</returns>
         public async Task<HttpResponseMessage> Delete(int id)
         {
+            HttpResponseMessage response;
             try
             {
                 var user = await _db.User.SingleAsync(x => x.UserId == id);
@@ -422,12 +487,14 @@ namespace CloudManagement.Controllers
                 _db.UserDetail.Remove(user.UserDetail);
                 var result = await _db.SaveChangesAsync();
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -439,6 +506,7 @@ namespace CloudManagement.Controllers
         [HttpGet, HttpPost]
         public async Task<HttpResponseMessage> Login(string username, string password)
         {
+            HttpResponseMessage response;
             try
             {
                 var user = await _db.User.Join(
@@ -447,15 +515,15 @@ namespace CloudManagement.Controllers
                  y => y.UserDetailId,
                  (x, y) => x).SingleAsync();
                 var result = user.UserId;
-                var response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
                 response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + user.Token);
-
-                return response;
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -465,24 +533,53 @@ namespace CloudManagement.Controllers
         /// <returns>用户编号</returns>
         public async Task<HttpResponseMessage> LoginByToken(string token)
         {
+            HttpResponseMessage response;
             try
             {
                 if (string.IsNullOrWhiteSpace(token) || !token.StartsWith(HttpExtensionMethods.AuthenticationType))
                 {
-                    throw new ArgumentException("Invalid token");
+                    Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid token");
                 }
                 token = token.Substring(HttpExtensionMethods.AuthenticationType.Length);
                 var user = await _db.User.SingleAsync(x => x.Token == token);
                 var result = user.UserId;
-                var response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
                 response.Headers.Add(HttpExtensionMethods.AuthenticationScheme, HttpExtensionMethods.AuthenticationType + token);
-
-                return response;
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
     }
+    #region 重命名多部分表单数据流提供程序
+
+    public class RenamingMultipartFormDataStreamProvider : MultipartFormDataStreamProvider
+    {
+        public string RootPath { get; set; }
+        //public Func<FileUpload.PostedFile, string> OnGetLocalFileName { get; set; }
+
+        public RenamingMultipartFormDataStreamProvider(string rootPath) : base(rootPath)
+        {
+            RootPath = rootPath;
+        }
+
+        public override string GetLocalFileName(HttpContentHeaders headers)
+        {
+            string filePath = headers.ContentDisposition.FileName;
+
+            // Multipart requests with the file name seem to always include quotes.
+            if (filePath.StartsWith(@"""") && filePath.EndsWith(@""""))
+            {
+                filePath = filePath.Substring(1, filePath.Length - 2);
+            }
+            var extension = Path.GetExtension(filePath);
+
+            return Path.ChangeExtension(Guid.NewGuid().ToString(), extension);
+        }
+    }
+
+    #endregion
 }

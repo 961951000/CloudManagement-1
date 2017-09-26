@@ -3,7 +3,6 @@ using CloudManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -36,6 +35,7 @@ namespace CloudManagement.Controllers
         /// <returns>租户列表</returns>
         public async Task<HttpResponseMessage> GetTenantList()
         {
+            HttpResponseMessage response;
             try
             {
                 var result = await _db.Tenant.AnyAsync() ? await _db.Tenant.ToListAsync() : new List<Tenant>();
@@ -44,12 +44,14 @@ namespace CloudManagement.Controllers
                     tenant.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == tenant.TenantDetailId);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -59,17 +61,20 @@ namespace CloudManagement.Controllers
         /// <returns>租户信息</returns>
         public async Task<HttpResponseMessage> GetTenantByTenantId(int id)
         {
+            HttpResponseMessage response;
             try
             {
                 var result = await _db.Tenant.SingleAsync(x => x.TenantId == id);
                 result.TenantDetail = await _db.TenantDetail.SingleAsync(x => x.TenantDetailId == result.TenantDetailId);
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -114,11 +119,11 @@ namespace CloudManagement.Controllers
         {
             if (await _db.User.AnyAsync(x => x.UserId == id))
             {
-                throw new ArgumentException($"User {id} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"User {id} does not exist.");
             }
             if (tenantDetail == null)
             {
-                throw new ArgumentException("Parameter tenantDetail userDetailsList can not empty.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Parameter tenantDetail userDetailsList can not empty.");
             }
             var tenant = new Tenant
             {
@@ -143,11 +148,11 @@ namespace CloudManagement.Controllers
         {
             if (await _db.User.AnyAsync(x => x.UserId == id))
             {
-                throw new ArgumentException($"User {id} does not exist.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"User {id} does not exist.");
             }
             if (tenant?.TenantDetail == null)
             {
-                throw new ArgumentException("Lack of Tenant information.");
+                Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Lack of Tenant information.");
             }
             tenant.TenantId = id;
             tenant.UpdateTime = DateTime.Now;
@@ -165,6 +170,7 @@ namespace CloudManagement.Controllers
         [HttpPut]
         public async Task<HttpResponseMessage> Delete(int id)
         {
+            HttpResponseMessage response;
             try
             {
                 var tenant = await _db.Tenant.SingleAsync(x => x.TenantId == id);
@@ -173,12 +179,14 @@ namespace CloudManagement.Controllers
                 _db.TenantDetail.Remove(tenant.TenantDetail);
                 var result = await _db.SaveChangesAsync();
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
+                response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
             catch (InvalidOperationException ex) when (ex.Message == "Sequence contains no elements.")
             {
-                throw new ArgumentException(ex.Message);
+                response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+
+            return response;
         }
     }
 }

@@ -53,13 +53,14 @@ namespace CloudManagement.Controllers
         /// 文件上传
         /// </summary>
         /// <returns></returns>
-        public async Task<IHttpActionResult> FileUpload()
+        public async Task<HttpResponseMessage> FileUpload()
         {
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
-            var rootPath = Path.Combine(IOHelper.RootPath, @"/temp");
+
+            var rootPath = Path.Combine(IOHelper.RootPath, "Temp");
             IOHelper.CreateDirectoryIfNotExist(rootPath);
             var provider = new MultipartFormDataStreamProvider(rootPath);
             // Read the form data.  
@@ -72,12 +73,12 @@ namespace CloudManagement.Controllers
             foreach (MultipartFileData file in provider.FileData)
             {
                 //new folder
-                var newRoot = Path.Combine(IOHelper.RootPath, @"Resources/Files/Upload");
+                var newRoot = Path.Combine(IOHelper.RootPath, @"Resources\Files\Upload");
                 IOHelper.CreateDirectoryIfNotExist(newRoot);
                 if (File.Exists(file.LocalFileName))
                 {
                     //new fileName
-                    var fileName = file.Headers.ContentDisposition.FileName.Substring(1, file.Headers.ContentDisposition.FileName.Length - 2);
+                    var fileName = file.Headers.ContentDisposition.FileName.TrimStart('"').TrimEnd('"');
                     var newFileName = Guid.NewGuid() + "." + fileName.Split('.')[1];
                     var newFullFileName = Path.Combine(newRoot, newFileName);
                     fileNameList.Add(newFileName);
@@ -91,7 +92,7 @@ namespace CloudManagement.Controllers
             }
             Logger.Info($"{fileNameList.Count} file(s) /{fileTotalSize} bytes uploaded successfully!     Details -> {sb}");
 
-            return Json(fileNameList);
+            return Request.CreateResponse(HttpStatusCode.OK, Json(fileNameList));
         }
     }
 }
